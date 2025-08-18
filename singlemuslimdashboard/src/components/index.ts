@@ -11,3 +11,4 @@ export { default as FormWraper } from "./FormWraper/FormWraper";
 export { default as PasswordCriteriaList } from "./PasswordCriteriaList/PasswordCriteriaList";
 export { default as ArrowBack } from "./ArrowBack/ArrowBack";
 export { default as CustomSelect } from "./CustomSelect/CustomSelect";
+export { default as CustomChart } from "./CustomChart/CustomChart";
