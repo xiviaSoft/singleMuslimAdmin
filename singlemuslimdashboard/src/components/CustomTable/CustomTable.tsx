@@ -7,11 +7,12 @@ import {
     TableHead,
     TableRow,
     IconButton,
-    Paper,
+
 } from '@mui/material';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { COLORS } from 'constant/color';
+
 
 type Column = {
     label: string;
@@ -20,14 +21,16 @@ type Column = {
 
 type Row = {
     [key: string]: string;
+  
 };
 
 interface CustomTableProps {
     columns: Column[];
     rows: Row[];
+    movertIcon?: any;
 }
 
-const CustomTable: React.FC<CustomTableProps> = ({ columns, rows }) => {
+const CustomTable: React.FC<CustomTableProps> = ({ columns, rows, movertIcon }) => {
     return (
         <TableContainer
 
@@ -41,7 +44,7 @@ const CustomTable: React.FC<CustomTableProps> = ({ columns, rows }) => {
             <Table
                 sx={{
                     borderCollapse: 'separate',
-                    borderSpacing: '0 16px', // spacing between rows
+                    borderSpacing: '0 16px', 
                     minWidth: '100%',
 
                 }}
@@ -61,7 +64,7 @@ const CustomTable: React.FC<CustomTableProps> = ({ columns, rows }) => {
                         }}
                     >
                         {columns.map((col, idx) => (
-                            <TableCell key={idx} align='left' sx={{whiteSpace:'nowrap'}}>{col.label}</TableCell>
+                            <TableCell key={idx} align='left' sx={{ whiteSpace: 'nowrap' }}>{col.label}</TableCell>
                         ))}
                         <TableCell />
                         <TableCell />
@@ -87,8 +90,8 @@ const CustomTable: React.FC<CustomTableProps> = ({ columns, rows }) => {
                                     padding: ' 0',
                                     borderBottom: 'none',
                                     // bgcolor:'red',
-                                    fontWeight:700,
-                                    whiteSpace:'nowrap'
+                                    fontWeight: 700,
+                                    whiteSpace: 'nowrap'
                                 },
                                 '& td:first-of-type': {
                                     padding: '5px 32px',
@@ -102,10 +105,8 @@ const CustomTable: React.FC<CustomTableProps> = ({ columns, rows }) => {
                                 </TableCell>
                             ))}
 
-                            <TableCell>
-                                <IconButton>
-                                    <MoreVertIcon />
-                                </IconButton>
+                            <TableCell >
+                                {movertIcon}
                             </TableCell>
                             <TableCell>
                                 <IconButton>

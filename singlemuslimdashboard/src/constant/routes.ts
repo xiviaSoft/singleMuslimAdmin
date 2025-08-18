@@ -10,8 +10,10 @@ export const ROUTES = {
   // Main routes
   ADMINS: "/",
   USERS: "/users",
+  USERS_Profile: "/user-profile",
   SAFETY_REPORT: "/safety-report",
   SAFETY_DETAILS: "/report-details",
+  ANALYTICS: "/analytics",
   SETTINGS: "/settings",
   // ADMINS: "/admins",
   //   SALES: "/sales",

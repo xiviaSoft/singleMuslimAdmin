@@ -6,6 +6,7 @@ export const COLORS = {
     hardDark: "#37474f",
     thin: "#D3E0D9",
   },
+  
 
   //   success: {
   //     main: "#009A59",
@@ -16,6 +17,7 @@ export const COLORS = {
     //   main: "#F34F01",
     main: "#FF7F50",
     dark: "#cb2c2c",
+    orangeRed: "#EB9A7F",
   },
   white: {
     main: "#ffffff",

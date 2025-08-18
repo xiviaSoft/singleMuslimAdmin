@@ -60,7 +60,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
             fontSize: "12px",
             fontWeight: 700,
             color: COLORS.primary.hardDark,
-            mb: 0.5
+            my: 1
           }}
         >
           {label}
@@ -99,13 +99,13 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
             )}
             renderValue={(selected) =>
               !selected ? (
-                <em>Select any</em>
+                <em style={{ fontSize: '14px' }}>Select any</em>
               ) : (
                 options.find((opt) => opt.value === selected)?.label
               )
             }
             sx={{
-              width: width || "285px",
+              width: width || "100%",
               borderRadius: "50px",
               backgroundColor: COLORS.gray.lighter,
               height: height || "56px",
@@ -135,17 +135,19 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
                 key={option.value}
                 value={option.value}
                 sx={{
+                  mt: 1,
                   py: "10px",
                   borderBottom: `1px solid ${COLORS.gray.lighter}`,
                   "&:last-of-type": { border: "none" },
-                  "&:hover": { bgcolor: COLORS.gray.main },
+                  "&:hover": { bgcolor: COLORS.gray.lighter },
                   "&.Mui-selected": {
                     bgcolor: COLORS.primary.hardDark,
                     color: COLORS.white.main,
                     "&:hover": {
-                      bgcolor: COLORS.gray.main,
+                      bgcolor: COLORS.gray.light,
                       color: COLORS.black.main,
                     },
+
                   },
                   fontSize: "13px",
                 }}
