@@ -7,9 +7,13 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { COLORS } from "constant/color";
-import { CustomDialogBox, MoreVertMenu } from "components";
+import { CustomDialogBox, CustomRadio, MoreVertMenu } from "components";
+import AddAdmin from "../AddAdmin/AddAdmin";
+import { FormProvider, useForm } from "react-hook-form";
+import { PERMISSON_DATA } from "constant";
 
 const AdminCard = () => {
+    const methods = useForm();
     const [showEdit, setShowEdit] = useState(false);
     const [showDelete, setShowDelete] = useState(false);
 
@@ -73,13 +77,32 @@ const AdminCard = () => {
             </CustomDialogBox>
             <CustomDialogBox
                 open={showEdit}
-                title="Edit Admin"
+                title="Update Admin"
                 onClose={() => setShowEdit(false)}
                 onConfirm={() => { setShowEdit(false); }}
                 confirmText="Update Admin"
-                icon={<Dangerous />}
+
             >
-                Are you sure you want to delete the admin “Jack Sparrow”? Actions are not reversable. Their comments and uploads to the project will remain.
+                <AddAdmin />
+                <Stack mt={2} spacing={2} ml={1}>
+                    <Typography>
+                        Permissions
+                    </Typography>
+                    <FormProvider {...methods}>
+                        <form >
+                            <CustomRadio
+                                name="gender"
+
+                                options={PERMISSON_DATA.map((item) => ({
+                                    label: item,
+                                    value: item
+                                }))}
+
+                            />
+
+                        </form>
+                    </FormProvider>
+                </Stack>
             </CustomDialogBox>
         </>
     );

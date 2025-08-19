@@ -12,6 +12,7 @@ interface PageHeaderProps {
     textFieldName?: string;
     textFieldPlaceholder?: string;
     title: string
+    onClick?: () => void;
 }
 
 const PageHeader: React.FC<PageHeaderProps> = ({
@@ -20,7 +21,8 @@ const PageHeader: React.FC<PageHeaderProps> = ({
     buttonIcon = <Add />,
     textFieldName = "search",
     textFieldPlaceholder = "Search user",
-    title = "Manage Users"
+    title = "Manage Users",
+    onClick,
 }) => {
     const method = useForm();
 
@@ -42,6 +44,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
                         title={buttonTitle}
                         variant="contained"
                         startIcon={buttonIcon}
+                        onClick={onClick}
                     />
                 ) : (
                     <CustomTextField

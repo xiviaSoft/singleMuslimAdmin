@@ -29,6 +29,19 @@ export const NAVDATA = [
   },
 ];
 
+export const PERMISSON_DATA = [
+  "All",
+
+  "Manage Users Account",
+
+  "View Users Account",
+
+  "Manage Safety Reports",
+
+  "View Safety Reports",
+  "View Analytics & Statistics",
+];
+
 export const REPORT_TABLE_DATA = {
   columns: [
     { label: "COMPANY NAME", field: "companyName" },
