@@ -31,8 +31,8 @@ export const CustomDialogBox: React.FC<CustomDialogBoxProps> = ({
                 "& .MuiPaper-root": {
                     backgroundColor: COLORS.white.light,
                     borderRadius: "16px",
-                    maxWidth: "400px",
-                    padding: "40px",
+                    width: { md: '500px', sm: '400px', xs: '90%' },
+                    padding: { md: '40px', sm: '30px', xs: '20px' },
                     margin: 0,
                 },
             }}
@@ -77,6 +77,7 @@ export const CustomDialogBox: React.FC<CustomDialogBoxProps> = ({
                     my: "24px",
                     maxHeight: "300px",
                     overflowY: "auto",
+                    overflowX: 'hidden',
 
 
                     "&::-webkit-scrollbar": {

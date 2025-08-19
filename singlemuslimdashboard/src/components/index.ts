@@ -12,3 +12,4 @@ export { default as PasswordCriteriaList } from "./PasswordCriteriaList/Password
 export { default as ArrowBack } from "./ArrowBack/ArrowBack";
 export { default as CustomSelect } from "./CustomSelect/CustomSelect";
 export { default as CustomChart } from "./CustomChart/CustomChart";
+export { default as CustomRadio } from "./CustomRadio/CustomRadio";

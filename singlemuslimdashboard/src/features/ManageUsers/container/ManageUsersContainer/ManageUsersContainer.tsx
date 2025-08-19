@@ -1,5 +1,5 @@
-import { KeyboardArrowDown, Tune } from "@mui/icons-material";
-import { Stack } from "@mui/material";
+import { Add, KeyboardArrowDown, Tune } from "@mui/icons-material";
+import { Box, Stack } from "@mui/material";
 import { CustomButton, CustomDialogBox, MoreVertMenu, PageHeader } from "components";
 
 import { UserDetailTab, UserTable, UserTabs } from "features/ManageUsers/components";
@@ -8,16 +8,17 @@ import { FormProvider, useForm } from "react-hook-form";
 
 
 const ManageUsersContainer = () => {
-    const [showLogout, setShowLogout] = useState(false);
+    const [edit, setEdit] = useState(false);
+    const [addUser, setAddUser] = useState(false);
 
 
     const handleLogout = () => {
         console.log("User logged out");
-        setShowLogout(false);
+        setEdit(false);
     };
     const menuItems = [
-        { label: "Edit", action: () => setShowLogout(true) },
-        { label: "Delete", action: () => setShowLogout(true) },
+        { label: "Edit", action: () => setEdit(true) },
+        { label: "Delete", action: () => setEdit(true) },
     ];
 
 
@@ -31,17 +32,29 @@ const ManageUsersContainer = () => {
                 <PageHeader title="Manage Users" />
                 <UserTabs />
                 <Stack direction={'row'} sx={{ justifyContent: 'end', gap: '10px' }}>
+                    <Box sx={{ display: 'flex', mr: 'auto' }}>
+                        <CustomButton variant="contained" title="Add User" onClick={() => setAddUser(true)} endIcon={<Add />} />
+                    </Box>
                     <CustomButton variant="outlined" title="Filter" endIcon={<Tune />} />
                     <CustomButton variant="contained" title="Sort By" endIcon={<KeyboardArrowDown />} />
                 </Stack>
 
-
                 <CustomDialogBox
-                    open={showLogout}
+                    open={edit}
                     title="Edit you detail ?"
-                    onClose={() => setShowLogout(false)}
+                    onClose={() => setEdit(false)}
                     onConfirm={handleLogout}
                     confirmText="Yes, Edit"
+
+                >
+                    <UserDetailTab />
+                </CustomDialogBox>
+                <CustomDialogBox
+                    open={addUser}
+                    title="Add New User"
+                    onClose={() => setAddUser(false)}
+                    onConfirm={handleLogout}
+                    confirmText="Yes, Add"
 
                 >
                     <UserDetailTab />

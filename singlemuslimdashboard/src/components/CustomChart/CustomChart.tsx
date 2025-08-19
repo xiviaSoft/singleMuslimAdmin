@@ -13,7 +13,7 @@ import {
 interface ChartDataTypes {
   title: string;
   data: any[];
-  categories: string[]; 
+  categories: string[];
 }
 
 const CustomTooltip = ({ active, payload, label }: any) => {
@@ -88,8 +88,8 @@ const CustomChart = ({ title, data, categories }: ChartDataTypes) => {
               <Tooltip content={<CustomTooltip />} cursor={{ fill: COLORS.gray.lighter }} />
               <Legend
                 layout="vertical"
-                verticalAlign="middle"
-                align="right"
+                verticalAlign="bottom"
+                align="center"
                 fontSize={12}
                 iconType="circle"
               />
