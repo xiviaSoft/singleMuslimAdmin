@@ -1,12 +1,13 @@
 import 'react-phone-number-input/style.css';
 import PhoneInput, { type Value } from 'react-phone-number-input';
 import { Controller, useFormContext, RegisterOptions } from 'react-hook-form';
-import { Box, InputAdornment } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { COLORS } from 'constant/color';
 import { CountryCode } from 'libphonenumber-js';
 
 interface CustomPhoneNumberFieldProps {
   name: string;
+  label?: string;
   rules?: RegisterOptions;
   width?: string;
   height?: string;
@@ -20,6 +21,7 @@ interface CustomPhoneNumberFieldProps {
 const CustomPhoneNumberField: React.FC<CustomPhoneNumberFieldProps> = ({
   name,
   rules,
+  label,
   width,
   height,
   placeholder,
@@ -32,76 +34,54 @@ const CustomPhoneNumberField: React.FC<CustomPhoneNumberFieldProps> = ({
 
   return (
     <Box width={{ md: width, sm: width, xs: '100%' }}>
+      {label && (<Typography sx={{ fontSize: '12px', fontWeight: 700, color: COLORS.primary.hardDark, m: '8px' }}>
+        {label}
+      </Typography>)}
       <Controller
         name={name}
         control={control}
         defaultValue={defaultValue}
         rules={rules}
-        render={({ field, fieldState }) => (
+        render={({ field }) => (
           <PhoneInput
             {...field}
             defaultCountry={defaultCountry}
             placeholder={placeholder || 'Enter phone number'}
             disabled={disabled}
             readOnly={readOnly}
-            numberInputProps={{
-              style: {
-                width: '100%',
-                borderRadius: '50px',
-                backgroundColor: COLORS.gray.lighter,
-                border: 'none',
-                height: height || '56px',
-                paddingLeft: '48px', // space for flag+code
-                paddingRight: '8px',
-                outline: 'none',
-                fontSize: '16px',
-              },
-            }}
-            inputComponent={({ value, onChange, ...rest }: any) => (
-              <Box sx={{ position: 'relative', width: '100%' }}>
-                <InputAdornment
-                  position="start"
-                  sx={{
-                    position: 'absolute',
-                    left: '12px',
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '4px',
-                  }}
-                >
-                  {/* This span is the built-in flag selector from react-phone-number-input */}
-                  <span
-                    className="PhoneInputCountry"
-                    style={{ display: 'flex', alignItems: 'center' }}
-                  >
-                    {/* react-phone-number-input automatically renders the flag + dial code */}
-                  </span>
-                </InputAdornment>
-
-                <input
-                  value={value}
-                  onChange={(e) => onChange(e.target.value)}
-                  {...rest}
-                  style={{
-                    width: '100%',
-                    borderRadius: '50px',
-                    backgroundColor: COLORS.gray.lighter,
-                    border: 'none',
-                    height: height || '56px',
-                    paddingLeft: '48px',
-                    paddingRight: '8px',
-                    outline: 'none',
-                    fontSize: '16px',
-                  }}
-                  readOnly={readOnly}
-                />
-              </Box>
-            )}
+            className="custom-phone-input"
           />
         )}
       />
+
+      <style>{`
+        /* Wrap */
+        .custom-phone-input {
+          display: flex;
+          align-items: center;
+          width: 100%;
+          background-color: ${COLORS.gray.lighter};
+          border-radius: 50px;
+          padding: 0 12px;
+          height: ${height || '56px'};
+        }
+
+        /* Flag dropdown */
+        .custom-phone-input .PhoneInputCountry {
+          margin-right: 8px;
+          display: flex;
+          align-items: center;
+        }
+
+        /* The actual number input */
+        .custom-phone-input input {
+          flex: 1;
+          border: none;
+          outline: none;
+          background: transparent;
+          font-size: 16px;
+        }
+      `}</style>
     </Box>
   );
 };

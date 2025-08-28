@@ -11,6 +11,7 @@ export const ROUTES = {
   ADMINS: "/",
   USERS: "/users",
   USERS_Profile: "/user-profile",
+  ADD_USER: "/add-user",
   SAFETY_REPORT: "/safety-report",
   SAFETY_DETAILS: "/report-details",
   ANALYTICS: "/analytics",

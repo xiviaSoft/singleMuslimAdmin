@@ -72,26 +72,35 @@ export const REPORT_TABLE_DATA = {
 };
 export const USER_TABLE_DATA = {
   columns: [
-    { label: "Company Name / NAME", field: "name" },
-    { label: "Email", field: "email" },
-    { label: "Phone", field: "phone" },
-    { label: "Subscription / Position", field: "subscription" },
-    { label: "STATUS", field: "status" },
+    { label: "Profile", field: "profile" },
+    { label: "Gender", field: "Gender" },
+    { label: "Age", field: "Age" },
+    { label: "Marital Status", field: "maritalStatus" },
+    { label: "Subscription", field: "subscription" },
+    { label: "Location", field: "Locatoin" },
+    { label: "Education", field: "Education" },
+    { label: "Status", field: "status" },
   ],
   rows: [
     {
-      name: "Jon Snow",
-      email: "sahar@chopdawg.com",
-      phone: "+1 (000) 279-1434",
+      profile: "Jon Snow",
+      Gender: "Male",
+      Age: "29",
+      maritalStatus: "Single",
       subscription: "Premium",
-      status: "Active",
+      Locatoin: "pakistan",
+      status: "active",
+      Education: "Master's Degree",
     },
     ...Array(5).fill({
-      name: "Jon Snow",
-      email: "sahar@chopdawg.com",
-      phone: "+1 (000) 279-1434",
+      profile: "Jon Snow",
+      Gender: "Male",
+      Age: "29",
+      maritalStatus: "Single",
       subscription: "Premium",
-      status: "Active",
+      Locatoin: "pakistan",
+      status: "active",
+      Education: "Master's Degree",
     }),
   ],
 };
@@ -404,11 +413,15 @@ export const LIVING_ARRANGEMENTS = [
 ];
 export const WANTS_CHILDREN = ["Yes", "No", "Unsure"];
 export const MARITAL_STATUS = [
-  "Never married",
-  "Legally separated",
+  // "Never married",
+  // "Legally separated",
+  // "Divorced",
+  // "Widowed",
+  // "Annulled",
+  "Single",
+  "Married",
   "Divorced",
   "Widowed",
-  "Annulled",
 ];
 
 //APPEARANCE
@@ -641,7 +654,7 @@ export const DATAING_USER_DATA = [
   { month: "Nov", totalUsers: 10500, activeUsers: 8300, inactiveUsers: 2200 },
   { month: "Dec", totalUsers: 12000, activeUsers: 9500, inactiveUsers: 2500 },
 ];
-
+export const GENDER = ["Male", "Female",];
 
 export const sections = [
   {
@@ -650,7 +663,7 @@ export const sections = [
       "My Citizenship": "Pakistani",
       "Country of Origin": "Pakistan",
       "Willing to Relocate?": "Internationally",
-      "I am Looking to Marry": "As soon as possible",
+      "I am Education to Marry": "As soon as possible",
       "My Income": "Prefer not to say",
       "Marital Status": "Never married",
       "Would I like to have Children?": "Yes",

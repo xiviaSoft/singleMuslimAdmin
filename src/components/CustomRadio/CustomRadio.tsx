@@ -38,7 +38,7 @@ const CustomRadio: React.FC<CustomRadioProps> = ({
     <Box>
       {label && (
         <Typography
-          sx={{ fontSize: "12px", fontWeight: 700, color: COLORS.primary.hardDark }}
+          sx={{ fontSize: "12px", fontWeight: 700, color: COLORS.primary.hardDark ,m:'8px'}}
         >
           {label}
         </Typography>
@@ -55,11 +55,14 @@ const CustomRadio: React.FC<CustomRadioProps> = ({
               {...field}
               row={row}
               onChange={(e) => field.onChange(e.target.value)}
+              // sx={{display:'flex',bgcolor:'red'}}
             >
               {options.map((option) => (
                 <FormControlLabel
+
                   key={option.value}
                   value={option.value}
+                  // sx={{bgcolor:'red',display:'flex'}}
                   control={
                     <Radio
                       sx={{

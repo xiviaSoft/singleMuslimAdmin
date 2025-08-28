@@ -4,11 +4,18 @@ import { FormProvider, useForm } from "react-hook-form"
 
 
 const LanguageInfo = () => {
-    const methods = useForm()
+    // const methods = useForm(
+    //     {
+    //         defaultValues: {
+    //             MyFirstLanguage: LANGUAGES[0],
+    //             MySecondLanguage: LANGUAGES[2]
+    //         }
+    //     }
+    // )
     return (
 
         <div>
-            <FormProvider {...methods}>
+            {/* <FormProvider {...methods}> */}
 
                 <CustomSelect
                     name="MyFirstLanguage"
@@ -29,7 +36,7 @@ const LanguageInfo = () => {
                     }))}
                 />
 
-            </FormProvider>
+            {/* </FormProvider> */}
         </div>
     )
 }

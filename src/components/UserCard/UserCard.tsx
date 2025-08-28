@@ -5,13 +5,20 @@ import { Logout, } from "@mui/icons-material";
 
 import CustomDialogBox from "components/CustomDialogBox/CustomDialogBox";
 import MoreVertMenu from "components/MoreVertMenu/MoreVertMenu";
+import { signOut } from "firebase/auth";
+import { auth } from "libs";
+import { useNavigate } from "react-router";
+import { ROUTES } from "constant";
 
 const UserCard = () => {
   const [showLogout, setShowLogout] = useState(false);
+  const naviagte = useNavigate()
 
 
   const handleLogout = () => {
     console.log("User logged out");
+    signOut(auth)
+    naviagte(ROUTES.LOGIN)
     setShowLogout(false);
   };
 

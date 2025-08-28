@@ -5,6 +5,7 @@ interface ButtonTypes extends ButtonProps {
     title?: string;
     textColor?: string;
     background?: string;
+    onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 const CustomButton = ({

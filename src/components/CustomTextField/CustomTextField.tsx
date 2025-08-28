@@ -83,7 +83,7 @@ const CustomTextField: React.FC<CustomTextFieldProps> = ({
 
     return (
         <Box width={{ md: width, sm: width, xs: "100%" }}>
-            {label && (<Typography sx={{ fontSize: '12px', fontWeight: 700, color: COLORS.primary.hardDark }}>
+            {label && (<Typography sx={{ fontSize: '12px', fontWeight: 700, color: COLORS.primary.hardDark, m: '8px' }}>
                 {label}
             </Typography>)}
             <Controller
@@ -113,11 +113,11 @@ const CustomTextField: React.FC<CustomTextFieldProps> = ({
                             ),
                             endAdornment: endAdornment,
                             sx: {
-                                width: width || "285px",
+                                // width: width || "285px",
                                 borderRadius: "50px",
                                 backgroundColor: COLORS.gray.lighter,
                                 border: "none",
-                                height: height || "56px",
+                                height: multiline ? "auto" : height || "56px",
                                 paddingRight: "8px",
                                 "& fieldset": { border: "none" }, // removes outline
                             },
