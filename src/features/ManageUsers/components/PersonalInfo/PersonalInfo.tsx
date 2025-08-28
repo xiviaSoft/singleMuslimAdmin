@@ -5,11 +5,26 @@ import { FormProvider, useForm } from "react-hook-form"
 
 
 const PersonalInfo = () => {
-    const methods = useForm()
+//   const methods = useForm({
+//   defaultValues: {
+//     city: "",
+//     country: "",
+//     relocate: "",
+//     LookingToMarry: "",
+//     MyIncome: "",
+//     MaritalStatus: "",
+//     liketoHaveChildren: "",
+//     DoIHaveChildrens: "",
+//     MyLivingArrangements: "",
+//     Country: "",
+//     STATE: ""
+//   }
+// });
+
     return (
 
         <div>
-            <FormProvider {...methods}>
+            {/* <FormProvider {...methods}> */}
                 <CustomSelect
                     name="city"
                     label="My Citizenship"
@@ -83,7 +98,7 @@ const PersonalInfo = () => {
                     }))}
                 />
                 <CustomSelect
-                    name="MyLivingArrangements?"
+                    name="MyLivingArrangementsap"
                     label="My Living Arrangements?"
                     labelOutside={true}
                     options={LIVING_ARRANGEMENTS.map((item) => ({
@@ -119,7 +134,7 @@ const PersonalInfo = () => {
                     }))}
                 />
 
-            </FormProvider>
+            {/* </FormProvider> */}
         </div>
     )
 }

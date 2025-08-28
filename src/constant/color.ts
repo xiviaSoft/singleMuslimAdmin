@@ -9,13 +9,8 @@ export const COLORS = {
   },
   
 
-  //   success: {
-  //     main: "#009A59",
-  //     light: "#E8FAF0",
-  //     strong: "#008557",
-  //   },
   error: {
-    //   main: "#F34F01",
+      // main: "#F34F01",
     main: "#FF7F50",
     dark: "#cb2c2c",
     orangeRed: "#EB9A7F",

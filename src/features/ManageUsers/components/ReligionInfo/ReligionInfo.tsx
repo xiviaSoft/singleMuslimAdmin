@@ -4,10 +4,20 @@ import { FormProvider, useForm } from "react-hook-form"
 
 
 const ReligionInfo = () => {
-    const methods = useForm()
+    // const methods = useForm({
+    //     defaultValues: { 
+    //         Religiousness: RELIGION_OPTIONS[0] || "", 
+    //         MySect: SEC_DATA[0] || "",
+    //         HijabNiqab: PREFER_HIJAB[0] || "",
+    //         Beard: BEARD[0] || "",
+    //         AreYouARevert: "No",   
+    //         DoYouKeepHalal: KEEPS_HALAL[0] || "",
+    //         DoYouPerformSalaah: PERFROMS_SALAAH[0] || "",
+    //     }
+    // })
     return (
         <div>
-            <FormProvider {...methods} >
+            {/* <FormProvider {...methods} > */}
                 <CustomSelect
                     name="Religiousness"
                     label="Religiousness"
@@ -71,7 +81,7 @@ const ReligionInfo = () => {
                         value: item,
                     }))}
                 />
-            </FormProvider>
+            {/* </FormProvider> */}
         </div>
     )
 }

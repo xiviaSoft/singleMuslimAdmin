@@ -5,7 +5,8 @@ import { App } from 'core'
 
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
+  <StrictMode>    
     <App />
+    
   </StrictMode>,
 )

@@ -2,7 +2,8 @@ import * as React from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { Box } from '@mui/material';
-import { COLORS } from 'constant/color';
+
+import { tabStyle } from 'utils';
 
 const UserTabs = () => {
     const [value, setValue] = React.useState('Active Users');
@@ -14,7 +15,7 @@ const UserTabs = () => {
     return (
         <Box
             sx={{
-                width: '100%',
+                inlineSize: '100%',
                 overflowX: 'auto', // allow horizontal scroll if needed
                 display: 'flex',
                 justifyContent: 'center',
@@ -28,25 +29,7 @@ const UserTabs = () => {
                 scrollButtons="auto"
                 allowScrollButtonsMobile
                 TabIndicatorProps={{ style: { display: 'none' } }}
-                sx={{
-                    bgcolor: COLORS.primary.thin,
-                    borderRadius: '12px',
-                    '& .MuiTab-root': {
-                        textTransform: 'none',
-                        color: COLORS.black.darkGray,
-                        fontSize: '14px',
-                        px: 3,
-                        py: 1,
-                        width: '250px',
-                        transition: '0.3s',
-                        whiteSpace: 'nowrap', // Required for scrollable
-                    },
-                    '& .Mui-selected': {
-                        borderRadius: '12px',
-                        bgcolor: COLORS.primary.light,
-                        color: '#000',
-                    },
-                }}
+                sx={tabStyle}
             >
                 <Tab value="Active Users" label="Active Users" />
                 <Tab value="Suspended Users" label="Suspended Users" />
