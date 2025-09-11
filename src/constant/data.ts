@@ -70,40 +70,50 @@ export const REPORT_TABLE_DATA = {
     }),
   ],
 };
-export const USER_TABLE_DATA = {
-  columns: [
-    { label: "Profile", field: "profile" },
-    { label: "Gender", field: "Gender" },
-    { label: "Age", field: "Age" },
-    { label: "Marital Status", field: "maritalStatus" },
-    { label: "Subscription", field: "subscription" },
-    { label: "Location", field: "Locatoin" },
-    { label: "Education", field: "Education" },
-    { label: "Status", field: "status" },
-  ],
-  rows: [
-    {
-      profile: "Jon Snow",
-      Gender: "Male",
-      Age: "29",
-      maritalStatus: "Single",
-      subscription: "Premium",
-      Locatoin: "pakistan",
-      status: "active",
-      Education: "Master's Degree",
-    },
-    ...Array(5).fill({
-      profile: "Jon Snow",
-      Gender: "Male",
-      Age: "29",
-      maritalStatus: "Single",
-      subscription: "Premium",
-      Locatoin: "pakistan",
-      status: "active",
-      Education: "Master's Degree",
-    }),
-  ],
-};
+// export const USER_TABLE_DATA_COLUMNS = [
+//   { label: "Profile", field: `firstName ` },
+//   { label: "Gender", field: "gender" },
+//   { label: "Age", field: "dateOfBirth" },
+//   { label: "Marital Status", field: "maritalStatus" },
+//   { label: "Subscription", field: "subscription" },
+//   { label: "Location", field: "Locatoin" },
+//   { label: "Education", field: "educationInformation.highestDegree" },
+//   { label: "Status", field: "status" },
+// ];
+export const USER_TABLE_DATA_COLUMNS = [
+  { label: "Full Name", field: "fullName" },
+  { label: "Date of Birth", field: "dob" },
+  { label: "Email", field: "email" },
+  { label: "Phone", field: "phoneNumber" },
+  { label: "Gender", field: "gender" },
+  { label: "Marital Status", field: "maritalStatus" },
+  { label: "Education", field: "education" },
+  { label: "Status", field: "status" },
+];
+
+// rows: [
+//   {
+//     profile: "Jon Snow",
+//     Gender: "Male",
+//     Age: "29",
+//     maritalStatus: "Single",
+//     subscription: "Premium",
+//     Locatoin: "pakistan",
+//     status: "active",
+//     Education: "Master's Degree",
+//   },
+// ...Array(5).fill({
+//   profile: "Jon Snow",
+//   Gender: "Male",
+//   Age: "29",
+//   maritalStatus: "Single",
+//   subscription: "Premium",
+//   Locatoin: "pakistan",
+//   status: "active",
+//   Education: "Master's Degree",
+// }),
+// ],
+
 export const DATA_SENT = [
   {
     categoryTitle: "Date Sent",
@@ -654,7 +664,7 @@ export const DATAING_USER_DATA = [
   { month: "Nov", totalUsers: 10500, activeUsers: 8300, inactiveUsers: 2200 },
   { month: "Dec", totalUsers: 12000, activeUsers: 9500, inactiveUsers: 2500 },
 ];
-export const GENDER = ["Male", "Female",];
+export const GENDER = ["Male", "Female"];
 
 export const sections = [
   {

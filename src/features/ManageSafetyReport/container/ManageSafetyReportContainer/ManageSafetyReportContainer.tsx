@@ -17,18 +17,18 @@ const ManageSafetyReportContainer = () => {
         { label: "Edit", action: () => setShowLogout(true) },
         { label: "Delete", action: () => setShowLogout(true) },
     ];
-    const {id}=useParams()
+    const { id } = useParams()
 
     return (
-        
-        
+
+
         <div>
             <PageHeader title="Safety Reports" />
             <Stack direction={'row'} sx={{ justifyContent: 'end', gap: '10px' }}>
                 <CustomButton variant="outlined" title="Filter" endIcon={<Tune />} />
                 <CustomButton variant="contained" title="Sort By" endIcon={<KeyboardArrowDown />} />
             </Stack>
-         
+
 
             <CustomDialogBox
                 open={showLogout}
@@ -40,7 +40,7 @@ const ManageSafetyReportContainer = () => {
             >
                 <UserDetailTab />
             </CustomDialogBox>
-            <CustomTable movertIcon={<MoreVertMenu items={menuItems} />} columns={REPORT_TABLE_DATA.columns} rows={REPORT_TABLE_DATA.rows} navigateClick={`${ROUTES.SAFETY_DETAILS}/${id}`} />
+            <CustomTable columns={REPORT_TABLE_DATA.columns} rows={REPORT_TABLE_DATA.rows} navigateClick={`${ROUTES.SAFETY_DETAILS}/${id}`} />
 
 
 

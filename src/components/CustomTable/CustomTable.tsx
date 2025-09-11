@@ -7,7 +7,6 @@ import {
     TableHead,
     TableRow,
     IconButton,
-
 } from '@mui/material';
 
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -28,11 +27,13 @@ type Row = {
 interface CustomTableProps {
     columns: Column[];
     rows: Row[];
-    movertIcon?: any;
+    // movertIcon?: any;
     navigateClick: string;
 }
 
-const CustomTable: React.FC<CustomTableProps> = ({ columns, rows, movertIcon, navigateClick }) => {
+
+
+const CustomTable: React.FC<CustomTableProps> = ({ columns, rows, navigateClick }) => {
     const navigate = useNavigate()
     return (
         <TableContainer
@@ -108,11 +109,11 @@ const CustomTable: React.FC<CustomTableProps> = ({ columns, rows, movertIcon, na
                                 </TableCell>
                             ))}
 
-                            <TableCell >
+                            {/* <TableCell >
                                 {movertIcon}
-                            </TableCell>
+                            </TableCell> */}
                             <TableCell>
-                                <IconButton onClick={() => navigate(navigateClick)}>
+                                <IconButton onClick={() => navigate(`${navigateClick}/${row.id}`)}>
                                     <ChevronRightIcon />
                                 </IconButton>
                             </TableCell>
@@ -120,7 +121,7 @@ const CustomTable: React.FC<CustomTableProps> = ({ columns, rows, movertIcon, na
                     ))}
                 </TableBody>
             </Table>
-        </TableContainer>
+        </TableContainer >
     );
 };
 

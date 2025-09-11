@@ -11,7 +11,7 @@ const Routes = () => {
             <Route path={ROUTES.ADMINS} element={<Admins />} />
             <Route path={ROUTES.USERS} element={<Users />} />
             <Route path={ROUTES.ADD_USER} element={<AddUser />} />
-            <Route path={ROUTES.USERS_Profile} element={<UserProfile />} />
+            <Route path={`${ROUTES.USERS_Profile}/:id`} element={<UserProfile />} />
             <Route path={ROUTES.SAFETY_REPORT} element={<SafetyReport />} />
             <Route path={`${ROUTES.SAFETY_DETAILS}/:id`} element={<ReportDetails />} />
             <Route path={ROUTES.ANALYTICS} element={<Analytics />} />

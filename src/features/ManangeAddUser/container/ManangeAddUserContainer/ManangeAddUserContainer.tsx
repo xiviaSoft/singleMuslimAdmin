@@ -2,15 +2,113 @@ import React from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { Box, Grid, Typography, Stack } from "@mui/material";
 import { User } from "collections";
-import { CustomButton, CustomPhoneNumberField, CustomRadio, CustomSelect, CustomTextField } from "components";
-import { EDUCATION_LEVEL, GENDER, MARITAL_STATUS } from "constant";
+import { ArrowBack, CustomButton, CustomPhoneNumberField, CustomRadio, CustomSelect, CustomTextField, PageHeader } from "components";
+import { EDUCATION_LEVEL, GENDER, MARITAL_STATUS, ROUTES } from "constant";
 import { COLORS } from "constant/color";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth, db } from "libs";
+import { FormData } from "types";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 
 const ManangeAddUserContainer: React.FC = () => {
-    const methods = useForm<User>();
+    const methods = useForm<FormData>();
 
-    const onSubmit = (data: User) => {
-        console.log("Profile Data:", data);
+    const onSubmit = async (data: FormData) => {
+        try {
+
+            const userCredential = await createUserWithEmailAndPassword(
+                auth,
+                data.email,
+                data.password
+            );
+
+            const uid = userCredential.user.uid;
+
+
+            const {
+                password,
+                companyName,
+                companyaddress,
+                companydescription,
+                role,
+                startDate,
+                endDate,
+                isCurrent,
+                technicalSkills,
+                softSkills,
+                languages,
+                facebook,
+                twitter,
+                linkedin,
+                instagram,
+                bio,
+                highestDegree, institutionName, graduationYear, fieldOfStudy,
+                ...rest
+            } = data;
+
+            // 2️⃣ Save to Firestore
+            await setDoc(doc(db, "users", uid), {
+
+                ...rest,
+                uid,
+
+                isActive: true,
+                isSuspended: false,
+                createdAt: serverTimestamp(),
+                updatedAt: serverTimestamp(),
+                lastLogin: serverTimestamp(),
+                bio: bio || "",
+                educationInformation: {
+                    highestDegree: highestDegree || "",
+                    institutionName: institutionName || "",
+                    graduationYear: graduationYear || null,
+                    fieldOfStudy: fieldOfStudy || "",
+                },
+
+                workExperience: {
+                    companyName: companyName || "",
+                    role: role || "",
+                    startDate: startDate ? new Date(startDate) : null,
+                    address: companyaddress || "",
+                    endDate: isCurrent ? null : endDate ? new Date(endDate) : null,
+                    isCurrent: isCurrent || false,
+                    description: companydescription || "",
+                },
+
+                socialLinks: {
+                    facebook: facebook || "",
+                    twitter: twitter || "",
+                    linkedin: linkedin || "",
+                    instagram: instagram || "",
+                },
+
+
+                skills: {
+                    technicalSkills: technicalSkills
+                        ? (Array.isArray(technicalSkills)
+                            ? technicalSkills
+                            : technicalSkills.split(",").map((item: string) => item.trim()))
+                        : [],
+
+                    softSkills: softSkills
+                        ? (Array.isArray(softSkills)
+                            ? softSkills
+                            : softSkills.split(",").map((item: string) => item.trim()))
+                        : [],
+
+                    languages: languages
+                        ? (Array.isArray(languages)
+                            ? languages
+                            : languages.split(",").map((item: string) => item.trim()))
+                        : [],
+                },
+            });
+
+            alert("User signed up successfully!");
+            methods.reset()
+        } catch (error) {
+            console.error("Error:", error);
+        }
     };
 
     return (
@@ -20,7 +118,8 @@ const ManangeAddUserContainer: React.FC = () => {
                 onSubmit={methods.handleSubmit(onSubmit)}
                 sx={{ p: 2, gap: 3 }}
             >
-                <Typography variant="h5" mb={2} fontWeight={700} color={COLORS.primary.hardDark}>
+
+                <Typography variant="h5" my={2} fontWeight={700} color={COLORS.primary.hardDark} fontSize={'30px'}>
                     Add New User
                 </Typography>
 
@@ -60,7 +159,16 @@ const ManangeAddUserContainer: React.FC = () => {
                         />
                     </Grid>
                     <Grid size={{ sm: 6, xs: 12 }}>
-                        <CustomPhoneNumberField name="phoneNumber" label="Phone number" />
+                        <CustomTextField
+                            placeholder='password'
+                            name="password"
+                            label="Password"
+                            type="password"
+                            rules={{ required: "Required" }}
+                        />
+                    </Grid>
+                    <Grid size={{ sm: 6, xs: 12 }}>
+                        <CustomPhoneNumberField name="phoneNumber" defaultCountry="US" label="Phone number" />
                     </Grid>
 
                     <Grid size={{ sm: 6, xs: 12 }}>
@@ -80,11 +188,15 @@ const ManangeAddUserContainer: React.FC = () => {
                     </Grid>
 
                     <Grid size={{ sm: 6, xs: 12 }}>
-                        <CustomRadio
-                            label="Gender"
+                        <CustomSelect
                             name="gender"
-                            row
-                            options={GENDER.map((item) => ({ label: item, value: item }))}
+                            label="Gender"
+                            // labelOutside={true}
+
+                            options={GENDER.map((item) => ({
+                                label: item,
+                                value: item,
+                            }))}
                         />
                     </Grid>
 
@@ -106,58 +218,127 @@ const ManangeAddUserContainer: React.FC = () => {
                         />
                     </Grid>
 
+
+
+
                     <Grid size={{ sm: 6, xs: 12 }}>
-                        <CustomTextField
-                            name="city"
-                            label="City"
-                            type="text"
-                            placeholder="Enter city"
-                        />
+                        <CustomTextField name="fieldOfStudy" label="Field Of Study " type="text" rules={{ required: "Required" }} placeholder='Field Of Study ' />
                     </Grid>
                     <Grid size={{ sm: 6, xs: 12 }}>
-                        <CustomTextField
-                            name="country"
-                            label="Country"
-                            type="text"
-                            placeholder="Enter country"
-                        />
+                        <CustomTextField name="highestDegree" label="Highest Degree" type="text" rules={{ required: "Required" }} placeholder='highest degree' />
                     </Grid>
 
                     <Grid size={{ sm: 6, xs: 12 }}>
-                        <CustomSelect
-                            name="educataion"
-                            label="Education Level"
-                            labelOutside={true}
-                            options={EDUCATION_LEVEL.map((item) => ({ label: item, value: item }))}
-                        />
+                        <CustomTextField name="institutionName" label="Institution Name" type="text" rules={{ required: "Required" }} placeholder='Institution Name' />
+                    </Grid>
+                    <Grid size={{ sm: 6, xs: 12 }}>
+                        <CustomTextField name="graduationYear" label="Graduation Year" type="text" rules={{ required: "Required" }} placeholder='Graduation Year' />
                     </Grid>
 
                     <Grid size={{ sm: 6, xs: 12 }}>
-                        <CustomTextField
-                            name="institution"
-                            label="Institution"
-                            type="text"
-                            placeholder="Enter institution"
-                        />
+                        <CustomTextField name="technicalSkills" label="Technical Skills" type="text" rules={{ required: "Required" }} placeholder='Technical Skills' />
+                    </Grid>
+                    <Grid size={{ sm: 6, xs: 12 }}>
+                        <CustomTextField name="softSkills" label="Soft Skills" type="text" rules={{ required: "Required" }} placeholder='Soft Skills' />
                     </Grid>
 
                     <Grid size={{ sm: 6, xs: 12 }}>
+                        <CustomTextField name="languages" label="Languages" type="text" rules={{ required: "Required" }} placeholder='Languages' />
+                    </Grid>
+                    <Grid size={12}>
                         <CustomTextField
-                            name="skills"
-                            label="Skills"
+                            name="bio"
+                            label="Bio"
                             type="text"
-                            placeholder="e.g. React, Firebase, TypeScript"
+                            placeholder="Write a short bio"
+                            multiline={true}
+                            maxLength={300}
+                            width="100%"
+                        />
+                    </Grid>
+                    <Grid size={12}>
+                        <CustomTextField
+                            placeholder='Address'
+                            name="address"
+                            label="Address"
+                            type="text"
+                            rules={{ required: "Required" }}
                         />
                     </Grid>
 
+
+
+
+                    {/* work experience */}
+
+                    <Grid size={12}>
+                        <Typography sx={{ fontSize: '20px', color: COLORS.primary.hardDark, fontWeight: 600 }}>
+                            Work Experience
+                        </Typography>
+                    </Grid>
                     <Grid size={{ sm: 6, xs: 12 }}>
                         <CustomTextField
-                            name="language"
-                            label="Preferred Language"
+                            name="companyName"
+                            label="Company Name"
                             type="text"
-                            placeholder="Enter language"
+                            rules={{ required: "Required" }}
+                            placeholder='company name'
                         />
                     </Grid>
+                    <Grid size={{ sm: 6, xs: 12 }}>
+                        <CustomTextField
+                            name="role"
+                            label="Role"
+                            type="text"
+                            rules={{ required: "Required" }}
+                            placeholder='role'
+                        />
+                    </Grid>
+                    <Grid size={{ sm: 6, xs: 12 }}>
+                        <CustomTextField
+                            name="companyaddress"
+                            label="Company Address"
+                            type="text"
+                            rules={{ required: "Required" }}
+                            placeholder='company address'
+                        />
+                    </Grid>
+                    <Grid size={{ sm: 6, xs: 12 }}>
+                        <CustomTextField
+                            name="companydescription"
+                            label="Compnay Description"
+                            type="text"
+                            // rules={{ required: "Required" }}
+                            placeholder='company description'
+                        />
+                    </Grid>
+                    <Grid size={{ sm: 6, xs: 12 }}>
+                        <CustomTextField
+                            name="startDate"
+                            label="Start Date"
+                            type="date"
+                            rules={{ required: "Required" }}
+                            placeholder='start date'
+                        />
+                    </Grid>
+                    <Grid size={{ sm: 6, xs: 12 }}>
+                        <CustomTextField
+                            name="endDate"
+                            label="End Date"
+                            type="date"
+                            placeholder='end date'
+                        />
+                    </Grid>
+                    <Grid size={{ sm: 6, xs: 12 }}>
+                        <CustomTextField
+                            name="isCurrent"
+                            label="Currently Working"
+                            type="text"
+                            placeholder='Enter yes or no '
+                        />
+                    </Grid>
+
+
 
                     {/* Section: Social Information */}
                     <Grid size={12}>
@@ -166,13 +347,14 @@ const ManangeAddUserContainer: React.FC = () => {
                         </Typography>
                     </Grid>
 
+
                     <Grid size={{ sm: 6, xs: 12 }}>
                         <CustomTextField
                             name="facebook"
                             label="Facebook"
                             type="text"
                             placeholder="Facebook profile link"
-                            showSearchIcon
+
                         />
                     </Grid>
 
@@ -203,17 +385,7 @@ const ManangeAddUserContainer: React.FC = () => {
                         />
                     </Grid>
 
-                    <Grid size={12}>
-                        <CustomTextField
-                            name="bio"
-                            label="Bio"
-                            type="text"
-                            placeholder="Write a short bio"
-                            multiline={true}
-                            maxLength={300}
-                            width="100%"
-                        />
-                    </Grid>
+
                 </Grid>
 
                 {/* Submit Button */}
