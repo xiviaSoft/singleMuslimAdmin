@@ -1,58 +1,48 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { CustomDialogBox, PageHeader } from "components";
 import { AddAdmin, AdminCard } from "features/ManageAdmins/components";
-import { useState, useEffect } from "react";
-import { addDoc, collection, onSnapshot } from "firebase/firestore";
+import { useState, } from "react";
+import { addDoc, collection, } from "firebase/firestore";
 import { auth, db } from "libs";
 import { FormProvider, useForm } from "react-hook-form";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-// make sure you export initialized db
+import { COLORS } from "constant/color";
+import { Admin } from "collections";
+import { useAdmins } from "features/ManageAdmins/hooks";
 
-type Admin = {
-    id: string;
-    name: string;
-    email: string;
-    role: string;
-};
 
-type AddAdmin = {
-    role: string
-    firstName: string
-    lastName: string
-    password: string
-    email: string
-}
+export type AdminWithId = Admin & { id: string };
 
 const ManageAdminsContainer = () => {
-    const methods = useForm<AddAdmin>();
+    const methods = useForm<Admin>();
     const [isOpen, setIsOpen] = useState(false);
-    const [admins, setAdmins] = useState<Admin[]>([]);
 
-    useEffect(() => {
-        const unsubscribe = onSnapshot(collection(db, "admins"), (snapshot) => {
-            const adminList = snapshot.docs.map((doc) => ({
-                id: doc.id,
-                ...doc.data(),
-            })) as Admin[];
-            setAdmins(adminList);
-        });
+    const { data: adminsData = [], isLoading } = useAdmins();
 
-        return () => unsubscribe();
-    }, []);
-
-    const handleConfirm = async (data: AddAdmin) => {
+    const handleConfirm = async (data: any) => {
         try {
-             await createUserWithEmailAndPassword(
+            const userCredential = await createUserWithEmailAndPassword(
                 auth,
                 data.email,
                 data.password
             );
+
             await addDoc(collection(db, "admins"), {
-                name: `${data.firstName} ${data.lastName}`,
+                adminId: userCredential.user.uid,
+                firstName: data.firstName,
+                lastName: data.lastName,
                 email: data.email,
                 role: data.role,
+                phoneNumber: data.phoneNumber || null,
+                profileImageData: {
+                    url: "",
+                    alt: `${data.firstName} ${data.lastName}`,
+                },
                 createdAt: new Date(),
+                lastLogin: new Date(),
+                isActive: true,
             });
+            methods.reset()
             setIsOpen(false);
         } catch (err) {
             console.error("Error adding admin:", err);
@@ -68,19 +58,45 @@ const ManageAdminsContainer = () => {
                 onConfirm={methods.handleSubmit(handleConfirm)}
                 confirmText="Add Admin"
             >
-                <AddAdmin />
+                <AddAdmin mode="add" />
             </CustomDialogBox>
 
             <PageHeader
                 leftComponent="button"
                 title="Manage Admins"
-                onClick={() => setIsOpen(true)}
+                onClick={() => {
+                    // Reset form every time dialog opens
+                    methods.reset({
+                        role: undefined,
+                        firstName: "",
+                        lastName: "",
+                        email: "",
+                        //   password: "",
+                        phoneNumber: "",
+                    });
+                    setIsOpen(true);
+                }}
             />
 
             <Box sx={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
-                {admins.map((admin) => (
-                    <AdminCard key={admin.id} admin={admin} />
-                ))}
+                {isLoading ? (
+                    <Typography>Loading admins...</Typography>
+                ) : adminsData.length === 0 ? (
+                    <Typography
+                        sx={{
+                            width: "100%",
+                            height: "100vh",
+                            display: "grid",
+                            placeItems: "center",
+                            fontSize: "29px",
+                            color: COLORS.gray.light,
+                        }}
+                    >
+                        No other admins
+                    </Typography>
+                ) : (
+                    adminsData.map((admin: any) => <AdminCard key={admin.id} admin={admin} />)
+                )}
             </Box>
         </FormProvider>
     );

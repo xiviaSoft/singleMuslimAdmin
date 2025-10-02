@@ -7,3 +7,4 @@ export { default as AmountOfContentAddedUser } from "./AmountOfContentAddedUser/
 export { default as UserProfileDetail } from "./UserProfileDetail/UserProfileDetail";
 export { default as TitleRow } from "./TitleRow/TitleRow";
 export { default as CustomPersonalDetailCard } from "./CustomPersonalDetailCard/CustomPersonalDetailCard";
+export { default as EditProfile } from "./EditProfile/EditProfile";

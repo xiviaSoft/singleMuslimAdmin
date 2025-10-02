@@ -114,7 +114,7 @@ const CustomTextField: React.FC<CustomTextFieldProps> = ({
                             endAdornment: endAdornment,
                             sx: {
                                 // width: width || "285px",
-                                borderRadius: "50px",
+                                // borderRadius: "50px",
                                 backgroundColor: COLORS.gray.lighter,
                                 border: "none",
                                 height: multiline ? "auto" : height || "56px",

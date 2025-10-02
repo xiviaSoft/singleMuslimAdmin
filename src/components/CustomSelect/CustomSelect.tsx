@@ -7,9 +7,9 @@ import {
   Select,
   InputAdornment
 } from "@mui/material";
-import { COLORS } from "constant/color";
-import SearchIcon from "@mui/icons-material/Search";
 
+import SearchIcon from "@mui/icons-material/Search";
+import { COLORS } from "constant";
 interface Option {
   value: string;
   label: string;
@@ -21,6 +21,7 @@ interface CustomSelectProps {
   options: Option[];
   dependsOn?: string;
   width?: string;
+  isRequired?: boolean;
   height?: string;
   iconColor?: string;
   labelOutside?: boolean;
@@ -36,6 +37,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
   dependsOn,
   width,
   height,
+  isRequired,
   iconColor = COLORS.blue.main,
   showSearchIcon = false,
   onChange,
@@ -58,7 +60,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
           sx={{
             fontSize: "12px",
             fontWeight: 700,
-            color: COLORS.primary.hardDark,
+            color: COLORS.black.dark,
             my: 1
           }}
         >
@@ -70,7 +72,12 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
         name={name}
         control={control}
         defaultValue="" // ✅ ensures controlled
-        rules={{ required: `${label || "This field"} is required` }}
+        rules={{
+          required: isRequired
+            ? `${label || "This field"} is required`
+            : false, // ✅ conditionally required
+        }}
+
         render={({ field, fieldState }) => (
           <>
             <Select
@@ -112,7 +119,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
               }
               sx={{
                 width: width || "100%",
-                borderRadius: "50px",
+                // borderRadius: "50px",
                 backgroundColor: COLORS.gray.lighter,
                 height: height || "56px",
                 "& fieldset": { border: "none" },
@@ -148,11 +155,11 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
                   sx={{
                     mt: 1,
                     py: "10px",
-                    borderBottom: `1px solid ${COLORS.gray.lighter}`,
+                    borderBottom: `1px solid ${COLORS.gray.light}`,
                     "&:last-of-type": { border: "none" },
-                    "&:hover": { bgcolor: COLORS.gray.lighter },
+                    "&:hover": { bgcolor: COLORS.gray.light },
                     "&.Mui-selected": {
-                      bgcolor: COLORS.primary.hardDark,
+                      bgcolor: COLORS.primary.main,
                       color: COLORS.white.main,
                       "&:hover": {
                         bgcolor: COLORS.gray.light,

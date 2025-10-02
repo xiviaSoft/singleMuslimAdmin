@@ -1,4 +1,4 @@
-import { AuthContext } from "context"
+import { AuthContext, ToastProvider } from "context"
 import Routes from "core/Routes/Routes"
 import { BrowserRouter } from "react-router"
 
@@ -7,8 +7,11 @@ const App = () => {
     <div>
       <BrowserRouter>
         <AuthContext>
+          <ToastProvider>
 
-          <Routes />
+
+            <Routes />
+          </ToastProvider>
         </AuthContext>
       </BrowserRouter>
 

@@ -13,3 +13,5 @@ export { default as ArrowBack } from "./ArrowBack/ArrowBack";
 export { default as CustomSelect } from "./CustomSelect/CustomSelect";
 export { default as CustomChart } from "./CustomChart/CustomChart";
 export { default as CustomRadio } from "./CustomRadio/CustomRadio";
+export { default as MultipulCustomSelect } from "./MultipulCustomSelect/MultipulCustomSelect";
+

@@ -1,398 +1,229 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
-import { Box, Grid, Typography, Stack } from "@mui/material";
-import { User } from "collections";
-import { ArrowBack, CustomButton, CustomPhoneNumberField, CustomRadio, CustomSelect, CustomTextField, PageHeader } from "components";
-import { EDUCATION_LEVEL, GENDER, MARITAL_STATUS, ROUTES } from "constant";
+import {
+    Box,
+    Typography,
+    Divider,
+    Grid,
+    Paper,
+    Accordion,
+    AccordionSummary,
+    AccordionDetails,
+    Checkbox,
+    FormControlLabel,
+
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import {
+    CustomButton,
+    CustomPhoneNumberField,
+    CustomSelect,
+    CustomTextField,
+    MultipulCustomSelect,
+} from "components";
+import { GENDER, MARITAL_STATUS, LANGUAGES, SoftSkills, TechnicalSkills } from "constant";
 import { COLORS } from "constant/color";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "libs";
 import { FormData } from "types";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
+import { useToast } from "context";
+import { useCreateUser } from "features/ManageUsers/hooks";
+
+const Section = ({ title }: { title: string }) => (
+    <Box sx={{ mb: 2 }}>
+        <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
+            {title}
+        </Typography>
+        <Divider />
+    </Box>
+);
 
 const ManangeAddUserContainer: React.FC = () => {
     const methods = useForm<FormData>();
-
-    const onSubmit = async (data: FormData) => {
-        try {
-
-            const userCredential = await createUserWithEmailAndPassword(
-                auth,
-                data.email,
-                data.password
-            );
-
-            const uid = userCredential.user.uid;
+    const [disableWork, setDisableWork] = useState(false);
+    const [disableSocial, setDisableSocial] = useState(false);
+    const { showToast } = useToast()
+    const { reset } = methods
 
 
-            const {
-                password,
-                companyName,
-                companyaddress,
-                companydescription,
-                role,
-                startDate,
-                endDate,
-                isCurrent,
-                technicalSkills,
-                softSkills,
-                languages,
-                facebook,
-                twitter,
-                linkedin,
-                instagram,
-                bio,
-                highestDegree, institutionName, graduationYear, fieldOfStudy,
-                ...rest
-            } = data;
-
-            // 2️⃣ Save to Firestore
-            await setDoc(doc(db, "users", uid), {
-
-                ...rest,
-                uid,
-
-                isActive: true,
-                isSuspended: false,
-                createdAt: serverTimestamp(),
-                updatedAt: serverTimestamp(),
-                lastLogin: serverTimestamp(),
-                bio: bio || "",
-                educationInformation: {
-                    highestDegree: highestDegree || "",
-                    institutionName: institutionName || "",
-                    graduationYear: graduationYear || null,
-                    fieldOfStudy: fieldOfStudy || "",
-                },
-
-                workExperience: {
-                    companyName: companyName || "",
-                    role: role || "",
-                    startDate: startDate ? new Date(startDate) : null,
-                    address: companyaddress || "",
-                    endDate: isCurrent ? null : endDate ? new Date(endDate) : null,
-                    isCurrent: isCurrent || false,
-                    description: companydescription || "",
-                },
-
-                socialLinks: {
-                    facebook: facebook || "",
-                    twitter: twitter || "",
-                    linkedin: linkedin || "",
-                    instagram: instagram || "",
-                },
-
-
-                skills: {
-                    technicalSkills: technicalSkills
-                        ? (Array.isArray(technicalSkills)
-                            ? technicalSkills
-                            : technicalSkills.split(",").map((item: string) => item.trim()))
-                        : [],
-
-                    softSkills: softSkills
-                        ? (Array.isArray(softSkills)
-                            ? softSkills
-                            : softSkills.split(",").map((item: string) => item.trim()))
-                        : [],
-
-                    languages: languages
-                        ? (Array.isArray(languages)
-                            ? languages
-                            : languages.split(",").map((item: string) => item.trim()))
-                        : [],
-                },
-            });
-
-            alert("User signed up successfully!");
-            methods.reset()
-        } catch (error) {
-            console.error("Error:", error);
-        }
+    const createUserMutation = useCreateUser(showToast);
+    const onSubmit = (data: FormData) => {
+        createUserMutation.mutate(data, {
+            onSuccess: () => {
+                reset(); 
+            },
+        });
     };
 
     return (
         <FormProvider {...methods}>
-            <Stack
-                component="form"
-                onSubmit={methods.handleSubmit(onSubmit)}
-                sx={{ p: 2, gap: 3 }}
+            <Paper
+                elevation={3}
+                sx={{
+                    maxWidth: 900,
+                    mx: "auto",
+                    p: 4,
+                    borderRadius: 3,
+                    backgroundColor: COLORS.white.thin,
+                }}
             >
-
-                <Typography variant="h5" my={2} fontWeight={700} color={COLORS.primary.hardDark} fontSize={'30px'}>
+                <Typography variant="h5" sx={{ fontWeight: 700, mb: 3 }}>
                     Add New User
                 </Typography>
 
-                {/* All in ONE grid container */}
-                <Grid container spacing={3}>
-                    {/* Section: Account Information */}
-                    <Grid size={12}>
-                        <Typography sx={{ fontSize: '20px', color: COLORS.primary.hardDark, fontWeight: 600 }}>
-                            Account Information
-                        </Typography>
+                <Box
+                    component="form"
+                    onSubmit={methods.handleSubmit(onSubmit)}
+                    sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+                >
+                    {/* Personal Details */}
+                    <Section title="Personal Details" />
+                    <Grid container spacing={2}>
+                        <Grid size={{ md: 6, xs: 12 }}>
+                            <CustomTextField name="firstName" label="First Name" type="text" placeholder="Enter first name" />
+                        </Grid>
+                        <Grid size={{ md: 6, xs: 12 }}>
+                            <CustomTextField name="lastName" label="Last Name" type="text" placeholder="Enter last name" />
+                        </Grid>
+                        <Grid size={{ md: 6, xs: 12 }}>
+                            <CustomTextField name="email" label="Email" type="email" placeholder="Enter email" />
+                        </Grid>
+                        <Grid size={{ md: 6, xs: 12 }}>
+                            <CustomTextField name="password" label="Password" type="password" placeholder="Enter password" />
+                        </Grid>
+                        <Grid size={{ md: 6, xs: 12 }}>
+                            <CustomPhoneNumberField name="phoneNumber" defaultCountry="US" label="Phone number" placeholder="Enter phone number" />
+                        </Grid>
+                        <Grid size={{ md: 6, xs: 12 }}>
+                            <CustomTextField name="dateOfBirth" label="Date of Birth" type="date" placeholder="Select date of birth" />
+                        </Grid>
+                        <Grid size={{ md: 6, xs: 12 }}>
+                            <CustomSelect
+                                name="gender"
+                                label="Gender"
+                                options={GENDER.map((g) => ({ label: g, value: g }))}
+                            />
+                        </Grid>
+                        <Grid size={{ md: 6, xs: 12 }}>
+                            <CustomSelect
+                                name="maritalStatus"
+                                label="Marital Status"
+                                options={MARITAL_STATUS.map((m) => ({ label: m, value: m }))}
+                            />
+                        </Grid>
+                        <Grid size={12}>
+                            <CustomTextField name="address" label="Address" type="text" placeholder="Enter address" multiline minRows={2} />
+                        </Grid>
+                        <Grid size={12}>
+                            <CustomTextField name="bio" label="Bio" type="text" placeholder="Write a short bio" multiline minRows={2} />
+                        </Grid>
                     </Grid>
 
-                    <Grid size={{ sm: 6, xs: 12 }}>
-                        <CustomTextField
-                            name="firstName"
-                            label="First Name"
-                            type="text"
-                            placeholder="Enter first name"
-                        />
-                    </Grid>
-                    <Grid size={{ sm: 6, xs: 12 }}>
-                        <CustomTextField
-                            name="lastName"
-                            label="Last Name"
-                            type="text"
-                            placeholder="Enter last name"
-                        />
-                    </Grid>
-
-                    <Grid size={{ sm: 6, xs: 12 }}>
-                        <CustomTextField
-                            name="email"
-                            label="Email"
-                            type="email"
-                            placeholder="Enter email"
-                            rules={{ required: "Email is required" }}
-                        />
-                    </Grid>
-                    <Grid size={{ sm: 6, xs: 12 }}>
-                        <CustomTextField
-                            placeholder='password'
-                            name="password"
-                            label="Password"
-                            type="password"
-                            rules={{ required: "Required" }}
-                        />
-                    </Grid>
-                    <Grid size={{ sm: 6, xs: 12 }}>
-                        <CustomPhoneNumberField name="phoneNumber" defaultCountry="US" label="Phone number" />
+                    {/* Education */}
+                    <Section title="Education" />
+                    <Grid container spacing={2}>
+                        <Grid size={{ md: 6, xs: 12 }}>
+                            <CustomTextField name="institutionName" label="Institution Name" type="text" placeholder="Enter institution name" />
+                        </Grid>
+                        <Grid size={{ md: 6, xs: 12 }}>
+                            <CustomTextField name="highestDegree" label="Highest Degree" type="text" placeholder="Enter highest degree" />
+                        </Grid>
+                        <Grid size={{ md: 6, xs: 12 }}>
+                            <CustomTextField name="fieldOfStudy" label="Field of Study" type="text" placeholder="Enter field of study" />
+                        </Grid>
+                        <Grid size={{ md: 6, xs: 12 }}>
+                            <CustomTextField name="graduationYear" label="Graduation Year" type="text" placeholder="Enter graduation year" />
+                        </Grid>
                     </Grid>
 
-                    <Grid size={{ sm: 6, xs: 12 }}>
-                        <CustomTextField
-                            name="dateOfBirth"
-                            label="Date of Birth"
-                            type="date"
-                            placeholder="Enter you Date of birth"
-                        />
+                    {/* Skills */}
+                    <Section title="Skills" />
+                    <Grid container spacing={2}>
+                        <Grid size={{ xs: 12, md: 4 }}>
+                            <MultipulCustomSelect name="languages" label="Languages" options={LANGUAGES.map((l) => ({ label: l, value: l }))} />
+                        </Grid>
+                        <Grid size={{ xs: 12, md: 4 }}>
+                            <MultipulCustomSelect name="softSkills" label="Soft Skills" options={SoftSkills.map((s) => ({ label: s, value: s }))} />
+                        </Grid>
+                        <Grid size={{ xs: 12, md: 4 }}>
+                            <MultipulCustomSelect name="technicalSkills" label="Technical Skills" options={TechnicalSkills.map((t) => ({ label: t, value: t }))} />
+                        </Grid>
                     </Grid>
 
-                    {/* Section: Personal Information */}
-                    <Grid size={12}>
-                        <Typography sx={{ fontSize: '20px', color: COLORS.primary.hardDark, fontWeight: 600 }}>
-                            Personal Information
-                        </Typography>
-                    </Grid>
+                    {/* Work Experience */}
+                    <Accordion defaultExpanded sx={{ backgroundColor: COLORS.white.thin }}>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                            <Section title="Work Experience" />
+                            <FormControlLabel
+                                control={<Checkbox checked={disableWork} onChange={(e) => setDisableWork(e.target.checked)} />}
+                                label="Disable"
+                                onClick={(e) => e.stopPropagation()}
+                                sx={{ ml: "auto" }}
+                            />
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Grid container spacing={2}>
+                                <Grid size={{ md: 6, xs: 12 }}>
+                                    <CustomTextField type="text" name="companyName" label="Company Name" placeholder="Enter company name" disabled={disableWork} />
+                                </Grid>
+                                <Grid size={{ md: 6, xs: 12 }}>
+                                    <CustomTextField type="text" name="role" label="Role" placeholder="Enter role" disabled={disableWork} />
+                                </Grid>
+                                <Grid size={{ md: 6, xs: 12 }}>
+                                    <CustomTextField type="text" name="companyaddress" label="Company Address" placeholder="Enter company address" disabled={disableWork} />
+                                </Grid>
+                                <Grid size={{ md: 6, xs: 12 }}>
+                                    <CustomTextField type="text" name="isCurrent" label="Currently Working" placeholder="Yes / No" disabled={disableWork} />
+                                </Grid>
+                                <Grid size={{ md: 6, xs: 12 }}>
+                                    <CustomTextField name="startDate" label="Start Date" type="date" placeholder="Select start date" disabled={disableWork} />
+                                </Grid>
+                                <Grid size={{ md: 6, xs: 12 }}>
+                                    <CustomTextField name="endDate" label="End Date" type="date" placeholder="Select end date" disabled={disableWork} />
+                                </Grid>
+                                <Grid size={12}>
+                                    <CustomTextField name="companydescription" label="Description" multiline minRows={2} type="text" placeholder="Enter job description" disabled={disableWork} />
+                                </Grid>
+                            </Grid>
+                        </AccordionDetails>
+                    </Accordion>
 
-                    <Grid size={{ sm: 6, xs: 12 }}>
-                        <CustomSelect
-                            name="gender"
-                            label="Gender"
-                            // labelOutside={true}
+                    {/* Social Links */}
+                    <Accordion defaultExpanded sx={{ backgroundColor: COLORS.white.thin }}>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                            <Section title="Social Links" />
+                            <FormControlLabel
+                                control={<Checkbox checked={disableSocial} onChange={(e) => setDisableSocial(e.target.checked)} />}
+                                label="Disable"
+                                onClick={(e) => e.stopPropagation()}
+                                sx={{ ml: "auto" }}
+                            />
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Grid container spacing={2}>
+                                <Grid size={{ md: 6, xs: 12 }}>
+                                    <CustomTextField type="text" name="facebook" label="Facebook" placeholder="Facebook profile URL" disabled={disableSocial} />
+                                </Grid>
+                                <Grid size={{ md: 6, xs: 12 }}>
+                                    <CustomTextField type="text" name="instagram" label="Instagram" placeholder="Instagram profile URL" disabled={disableSocial} />
+                                </Grid>
+                                <Grid size={{ md: 6, xs: 12 }}>
+                                    <CustomTextField type="text" name="linkedin" label="LinkedIn" placeholder="LinkedIn profile URL" disabled={disableSocial} />
+                                </Grid>
+                                <Grid size={{ md: 6, xs: 12 }}>
+                                    <CustomTextField type="text" name="twitter" label="Twitter" placeholder="Twitter profile URL" disabled={disableSocial} />
+                                </Grid>
+                            </Grid>
+                        </AccordionDetails>
+                    </Accordion>
 
-                            options={GENDER.map((item) => ({
-                                label: item,
-                                value: item,
-                            }))}
-                        />
-                    </Grid>
-
-                    <Grid size={{ sm: 6, xs: 12 }}>
-                        <CustomSelect
-                            name="maritalStatus"
-                            label="Marital Status"
-                            labelOutside={true}
-                            options={MARITAL_STATUS.map((item) => ({ label: item, value: item }))}
-                        />
-                    </Grid>
-
-                    <Grid size={{ sm: 6, xs: 12 }}>
-                        <CustomTextField
-                            name="religion"
-                            label="Religion"
-                            type="text"
-                            placeholder="Enter religion"
-                        />
-                    </Grid>
-
-
-
-
-                    <Grid size={{ sm: 6, xs: 12 }}>
-                        <CustomTextField name="fieldOfStudy" label="Field Of Study " type="text" rules={{ required: "Required" }} placeholder='Field Of Study ' />
-                    </Grid>
-                    <Grid size={{ sm: 6, xs: 12 }}>
-                        <CustomTextField name="highestDegree" label="Highest Degree" type="text" rules={{ required: "Required" }} placeholder='highest degree' />
-                    </Grid>
-
-                    <Grid size={{ sm: 6, xs: 12 }}>
-                        <CustomTextField name="institutionName" label="Institution Name" type="text" rules={{ required: "Required" }} placeholder='Institution Name' />
-                    </Grid>
-                    <Grid size={{ sm: 6, xs: 12 }}>
-                        <CustomTextField name="graduationYear" label="Graduation Year" type="text" rules={{ required: "Required" }} placeholder='Graduation Year' />
-                    </Grid>
-
-                    <Grid size={{ sm: 6, xs: 12 }}>
-                        <CustomTextField name="technicalSkills" label="Technical Skills" type="text" rules={{ required: "Required" }} placeholder='Technical Skills' />
-                    </Grid>
-                    <Grid size={{ sm: 6, xs: 12 }}>
-                        <CustomTextField name="softSkills" label="Soft Skills" type="text" rules={{ required: "Required" }} placeholder='Soft Skills' />
-                    </Grid>
-
-                    <Grid size={{ sm: 6, xs: 12 }}>
-                        <CustomTextField name="languages" label="Languages" type="text" rules={{ required: "Required" }} placeholder='Languages' />
-                    </Grid>
-                    <Grid size={12}>
-                        <CustomTextField
-                            name="bio"
-                            label="Bio"
-                            type="text"
-                            placeholder="Write a short bio"
-                            multiline={true}
-                            maxLength={300}
-                            width="100%"
-                        />
-                    </Grid>
-                    <Grid size={12}>
-                        <CustomTextField
-                            placeholder='Address'
-                            name="address"
-                            label="Address"
-                            type="text"
-                            rules={{ required: "Required" }}
-                        />
-                    </Grid>
-
-
-
-
-                    {/* work experience */}
-
-                    <Grid size={12}>
-                        <Typography sx={{ fontSize: '20px', color: COLORS.primary.hardDark, fontWeight: 600 }}>
-                            Work Experience
-                        </Typography>
-                    </Grid>
-                    <Grid size={{ sm: 6, xs: 12 }}>
-                        <CustomTextField
-                            name="companyName"
-                            label="Company Name"
-                            type="text"
-                            rules={{ required: "Required" }}
-                            placeholder='company name'
-                        />
-                    </Grid>
-                    <Grid size={{ sm: 6, xs: 12 }}>
-                        <CustomTextField
-                            name="role"
-                            label="Role"
-                            type="text"
-                            rules={{ required: "Required" }}
-                            placeholder='role'
-                        />
-                    </Grid>
-                    <Grid size={{ sm: 6, xs: 12 }}>
-                        <CustomTextField
-                            name="companyaddress"
-                            label="Company Address"
-                            type="text"
-                            rules={{ required: "Required" }}
-                            placeholder='company address'
-                        />
-                    </Grid>
-                    <Grid size={{ sm: 6, xs: 12 }}>
-                        <CustomTextField
-                            name="companydescription"
-                            label="Compnay Description"
-                            type="text"
-                            // rules={{ required: "Required" }}
-                            placeholder='company description'
-                        />
-                    </Grid>
-                    <Grid size={{ sm: 6, xs: 12 }}>
-                        <CustomTextField
-                            name="startDate"
-                            label="Start Date"
-                            type="date"
-                            rules={{ required: "Required" }}
-                            placeholder='start date'
-                        />
-                    </Grid>
-                    <Grid size={{ sm: 6, xs: 12 }}>
-                        <CustomTextField
-                            name="endDate"
-                            label="End Date"
-                            type="date"
-                            placeholder='end date'
-                        />
-                    </Grid>
-                    <Grid size={{ sm: 6, xs: 12 }}>
-                        <CustomTextField
-                            name="isCurrent"
-                            label="Currently Working"
-                            type="text"
-                            placeholder='Enter yes or no '
-                        />
-                    </Grid>
-
-
-
-                    {/* Section: Social Information */}
-                    <Grid size={12}>
-                        <Typography sx={{ fontSize: '20px', color: COLORS.primary.hardDark, fontWeight: 600 }}>
-                            Social Information
-                        </Typography>
-                    </Grid>
-
-
-                    <Grid size={{ sm: 6, xs: 12 }}>
-                        <CustomTextField
-                            name="facebook"
-                            label="Facebook"
-                            type="text"
-                            placeholder="Facebook profile link"
-
-                        />
-                    </Grid>
-
-                    <Grid size={{ sm: 6, xs: 12 }}>
-                        <CustomTextField
-                            name="linkedin"
-                            label="LinkedIn"
-                            type="text"
-                            placeholder="LinkedIn profile link"
-                        />
-                    </Grid>
-
-                    <Grid size={{ sm: 6, xs: 12 }}>
-                        <CustomTextField
-                            name="twitter"
-                            label="Twitter"
-                            type="text"
-                            placeholder="Twitter profile link"
-                        />
-                    </Grid>
-
-                    <Grid size={{ sm: 6, xs: 12 }}>
-                        <CustomTextField
-                            name="instagram"
-                            label="Instagram"
-                            type="text"
-                            placeholder="Instagram profile link"
-                        />
-                    </Grid>
-
-
-                </Grid>
-
-                {/* Submit Button */}
-                <Box sx={{ mt: '20px', width: '200px', ml: 'auto' }}>
-                    <CustomButton title="Submit" type="submit" variant="contained" fullWidth />
+                    {/* Submit Button */}
+                    <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 3 }}>
+                        <CustomButton title="Submit" type="submit" />
+                    </Box>
                 </Box>
-            </Stack>
+            </Paper>
         </FormProvider>
     );
 };

@@ -40,9 +40,9 @@ const PersonalInformation = ({ data }: PersonalInformationProps) => {
           <Typography variant="body2" fontWeight="bold" sx={{ color: COLORS.black.main }}>
             Company Name:
           </Typography>
-          <Typography variant="body2">{data?.workExperience
+          {/* <Typography variant="body2">{data?.workExperience
             .companyName
-          }</Typography>
+          }</Typography> */}
         </Box>
 
         <Box display="flex" justifyContent="space-between" width={'350px'}>

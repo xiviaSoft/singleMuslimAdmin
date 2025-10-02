@@ -72,7 +72,9 @@ export interface User {
 }
 export interface Admin {
   adminId: string;
-  name: string;
+  // name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   role: AdminRole;
   phoneNumber?: string;
@@ -146,6 +148,3 @@ export interface Review {
   createdAt: Date; // Firebase server timestamp
   updatedAt: Date; // Firebase server timestamp
 }
-
-
-
