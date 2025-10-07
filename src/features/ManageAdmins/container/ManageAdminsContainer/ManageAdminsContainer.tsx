@@ -1,15 +1,13 @@
 import { Box, Typography } from "@mui/material";
 import { CustomDialogBox, PageHeader } from "components";
 import { AddAdmin, AdminCard } from "features/ManageAdmins/components";
-import { useState, } from "react";
-import { addDoc, collection, } from "firebase/firestore";
-import { auth, db } from "libs";
+import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { createUserWithEmailAndPassword } from "firebase/auth";
 import { COLORS } from "constant/color";
 import { Admin } from "collections";
-import { useAdmins } from "features/ManageAdmins/hooks";
+import { useAddAdmin, useAdmins } from "features/ManageAdmins/hooks";
 
+import { auth } from "libs";
 
 export type AdminWithId = Admin & { id: string };
 
@@ -18,36 +16,17 @@ const ManageAdminsContainer = () => {
     const [isOpen, setIsOpen] = useState(false);
 
     const { data: adminsData = [], isLoading } = useAdmins();
+    const addAdminMutation = useAddAdmin();
 
-    const handleConfirm = async (data: any) => {
+    const handleConfirm = methods.handleSubmit(async (data) => {
         try {
-            const userCredential = await createUserWithEmailAndPassword(
-                auth,
-                data.email,
-                data.password
-            );
-
-            await addDoc(collection(db, "admins"), {
-                adminId: userCredential.user.uid,
-                firstName: data.firstName,
-                lastName: data.lastName,
-                email: data.email,
-                role: data.role,
-                phoneNumber: data.phoneNumber || null,
-                profileImageData: {
-                    url: "",
-                    alt: `${data.firstName} ${data.lastName}`,
-                },
-                createdAt: new Date(),
-                lastLogin: new Date(),
-                isActive: true,
-            });
-            methods.reset()
+            await addAdminMutation.mutateAsync(data);
+            methods.reset();
             setIsOpen(false);
         } catch (err) {
             console.error("Error adding admin:", err);
         }
-    };
+    });
 
     return (
         <FormProvider {...methods}>
@@ -55,8 +34,10 @@ const ManageAdminsContainer = () => {
                 open={isOpen}
                 title="Add New Admin"
                 onClose={() => setIsOpen(false)}
-                onConfirm={methods.handleSubmit(handleConfirm)}
-                confirmText="Add Admin"
+                onConfirm={handleConfirm}
+                confirmText={
+                    addAdminMutation.isPending ? "Adding..." : "Add Admin"
+                }
             >
                 <AddAdmin mode="add" />
             </CustomDialogBox>
@@ -65,13 +46,11 @@ const ManageAdminsContainer = () => {
                 leftComponent="button"
                 title="Manage Admins"
                 onClick={() => {
-                    // Reset form every time dialog opens
                     methods.reset({
                         role: undefined,
                         firstName: "",
                         lastName: "",
                         email: "",
-                        //   password: "",
                         phoneNumber: "",
                     });
                     setIsOpen(true);
@@ -95,7 +74,11 @@ const ManageAdminsContainer = () => {
                         No other admins
                     </Typography>
                 ) : (
-                    adminsData.map((admin: any) => <AdminCard key={admin.id} admin={admin} />)
+                    adminsData
+                        .filter((myData) => myData.id !== auth.currentUser?.uid)
+                        .map((admin: any) => (
+                            <AdminCard key={admin.id} admin={admin} />
+                        ))
                 )}
             </Box>
         </FormProvider>

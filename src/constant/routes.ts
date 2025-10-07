@@ -4,7 +4,7 @@ export const ROUTES = {
   TWO_FACTOR: "/two-factor",
   NEW_PASSWORD: "/new-password",
   // SET_PASSWORD: "/set-password",
-  // IDENTIFY_USER: "/identify-user",
+  //  : "/identify-user",
   // FORGOT_PASSWORDS: "/forgot-password",
 
   // Main routes

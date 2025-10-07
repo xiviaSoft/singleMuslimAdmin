@@ -42,34 +42,34 @@ export const PERMISSON_DATA = [
   "View Analytics & Statistics",
 ];
 
-export const REPORT_TABLE_DATA = {
-  columns: [
-    { label: "COMPANY NAME", field: "companyName" },
+export const REPORT_TABLE_DATA = [
+
+    // { label: "COMPANY NAME", field: "companyName" },
     { label: "USER NAME", field: "userName" },
-    { label: "SUBJECT", field: "subject" },
-    { label: "CATEGORY", field: "category" },
-    { label: "CONTENT", field: "content" },
+    { label: "SUBJECT", field: "details" },
+    { label: "CATEGORY", field: "reason" },
+    // { label: "CONTENT", field: "content" },
     { label: "STATUS", field: "status" },
-  ],
-  rows: [
-    {
-      companyName: "Coral Design",
-      userName: "Lance Stroll",
-      subject: "I found out he was not part",
-      category: "Misuse",
-      content: "User Profile",
-      status: "Open",
-    },
-    ...Array(7).fill({
-      companyName: "Coral Design",
-      userName: "Lance Stroll",
-      subject: "I found out he was not part",
-      category: "Unrecognized User",
-      content: "Comment",
-      status: "New",
-    }),
-  ],
-};
+  ]
+  // rows: [
+  //   {
+  //     companyName: "Coral Design",
+  //     userName: "Lance Stroll",
+  //     subject: "I found out he was not part",
+  //     category: "Misuse",
+  //     content: "User Profile",
+  //     status: "Open",
+  //   },
+  //   ...Array(7).fill({
+  //     companyName: "Coral Design",
+  //     userName: "Lance Stroll",
+  //     subject: "I found out he was not part",
+  //     category: "Unrecognized User",
+  //     content: "Comment",
+  //     status: "New",
+  //   }),
+  // ],
+
 // export const USER_TABLE_DATA_COLUMNS = [
 //   { label: "Profile", field: `firstName ` },
 //   { label: "Gender", field: "gender" },

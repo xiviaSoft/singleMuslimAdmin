@@ -24,6 +24,7 @@ type Row = {
 
 };
 
+
 interface CustomTableProps {
     columns: Column[];
     rows: Row[];

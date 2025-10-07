@@ -1,4 +1,5 @@
-import { AuthContext, ToastProvider } from "context"
+
+import { AuthProvider, ToastProvider } from "context"
 import Routes from "core/Routes/Routes"
 import { BrowserRouter } from "react-router"
 
@@ -6,13 +7,13 @@ const App = () => {
   return (
     <div>
       <BrowserRouter>
-        <AuthContext>
+        <AuthProvider>
           <ToastProvider>
 
 
             <Routes />
           </ToastProvider>
-        </AuthContext>
+        </AuthProvider>
       </BrowserRouter>
 
     </div>

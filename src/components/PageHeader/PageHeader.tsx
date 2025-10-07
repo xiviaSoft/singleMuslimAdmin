@@ -3,6 +3,7 @@ import { Box, Stack, Typography } from "@mui/material";
 import CustomButton from "components/CustomButton/CustomButton";
 import CustomTextField from "components/CustomTextField/CustomTextField";
 import UserCard from "components/UserCard/UserCard";
+
 import { FormProvider, useForm } from "react-hook-form";
 
 interface PageHeaderProps {
@@ -15,6 +16,7 @@ interface PageHeaderProps {
     onClick?: () => void;
 }
 
+
 const PageHeader: React.FC<PageHeaderProps> = ({
     leftComponent = "textfield",
     buttonTitle = "Add",
@@ -26,6 +28,8 @@ const PageHeader: React.FC<PageHeaderProps> = ({
 }) => {
     const method = useForm();
 
+
+
     return (
         <FormProvider {...method}>
             <Stack
@@ -35,38 +39,38 @@ const PageHeader: React.FC<PageHeaderProps> = ({
                     mt: 3,
                     justifyContent: "space-between",
                     alignItems: "center",
-            flexWrap: "wrap",
-            mb: 3,
+                    flexWrap: "wrap",
+                    mb: 3,
                 }}
             >
-            {leftComponent === "button" ? (
-                <CustomButton
-                    title={buttonTitle}
-                    variant="contained"
-                    startIcon={buttonIcon}
-                    onClick={onClick}
-                />
-            ) : (
-                <CustomTextField
-                    name={textFieldName}
-                    placeholder={textFieldPlaceholder}
-                    type="text"
-                    width="285px"
-                    showSearchIcon={true}
-                />
-            )}
+                {leftComponent === "button" ? (
+                    <CustomButton
+                        title={buttonTitle}
+                        variant="contained"
+                        startIcon={buttonIcon}
+                        onClick={onClick}
+                    />
+                ) : (
+                    <CustomTextField
+                        name={textFieldName}
+                        placeholder={textFieldPlaceholder}
+                        type="text"
+                        width="285px"
+                        showSearchIcon={true}
+                    />
+                )}
 
-            <Typography
-                sx={{ fontSize: "22px", fontWeight: "900" }}
-                style={{ fontFamily: "Outfit, sans-serif" }}
-            >
-                {title}
-            </Typography>
+                <Typography
+                    sx={{ fontSize: "22px", fontWeight: "900" }}
+                    style={{ fontFamily: "Outfit, sans-serif" }}
+                >
+                    {title}
+                </Typography>
 
-            <Box sx={{ display: 'flex', order: { sm: 3, xs: -1 }, width: { sm: 'auto', xs: '100%' }, justifyContent: 'end' }}>
-                <UserCard />
-            </Box>
-        </Stack>
+                <Box sx={{ display: 'flex', order: { sm: 3, xs: -1 }, width: { sm: 'auto', xs: '100%' }, justifyContent: 'end' }}>
+                    <UserCard />
+                </Box>
+            </Stack>
         </FormProvider >
     );
 };

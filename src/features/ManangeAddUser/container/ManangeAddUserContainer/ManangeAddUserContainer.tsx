@@ -11,7 +11,7 @@ import {
     AccordionDetails,
     Checkbox,
     FormControlLabel,
-
+    CircularProgress,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
@@ -23,10 +23,7 @@ import {
 } from "components";
 import { GENDER, MARITAL_STATUS, LANGUAGES, SoftSkills, TechnicalSkills } from "constant";
 import { COLORS } from "constant/color";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth, db } from "libs";
 import { FormData } from "types";
-import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { useToast } from "context";
 import { useCreateUser } from "features/ManageUsers/hooks";
 
@@ -40,20 +37,54 @@ const Section = ({ title }: { title: string }) => (
 );
 
 const ManangeAddUserContainer: React.FC = () => {
-    const methods = useForm<FormData>();
+    const methods = useForm<FormData>({
+        defaultValues: {
+            firstName: "",
+            lastName: "",
+            email: "",
+            password: "",
+            phoneNumber: "",
+            dateOfBirth: new Date(), // ✅ must be a Date object
+            gender: "",
+            maritalStatus: "",
+            religion: "",
+            highestDegree: "",
+            languages: [],
+            technicalSkills: [],
+            softSkills: [],
+            companyName: "",
+            companyaddress: "",
+            companydescription: "",
+            institutionName: "",
+            graduationYear: new Date().getFullYear(), // ✅ number
+            fieldOfStudy: "",
+            bio: "",
+            role: "",
+            startDate: new Date(),
+            endDate: new Date(),
+            isCurrent: false,
+            facebook: "",
+            twitter: "",
+            linkedin: "",
+            instagram: "",
+        },
+    });
+
+
     const [disableWork, setDisableWork] = useState(false);
     const [disableSocial, setDisableSocial] = useState(false);
-    const { showToast } = useToast()
-    const { reset } = methods
-
+    const { showToast } = useToast();
+    const { reset } = methods;
 
     const createUserMutation = useCreateUser(showToast);
+    const { mutate, isPending, } = createUserMutation;
+
     const onSubmit = (data: FormData) => {
-        createUserMutation.mutate(data, {
-            onSuccess: () => {
-                reset(); 
-            },
+        mutate(data, {
+            onSuccess: () => reset({}),
         });
+
+
     };
 
     return (
@@ -77,7 +108,7 @@ const ManangeAddUserContainer: React.FC = () => {
                     onSubmit={methods.handleSubmit(onSubmit)}
                     sx={{ display: "flex", flexDirection: "column", gap: 2 }}
                 >
-                    {/* Personal Details */}
+                    {/* === Personal Details Section === */}
                     <Section title="Personal Details" />
                     <Grid container spacing={2}>
                         <Grid size={{ md: 6, xs: 12 }}>
@@ -120,7 +151,7 @@ const ManangeAddUserContainer: React.FC = () => {
                         </Grid>
                     </Grid>
 
-                    {/* Education */}
+                    {/* === Education === */}
                     <Section title="Education" />
                     <Grid container spacing={2}>
                         <Grid size={{ md: 6, xs: 12 }}>
@@ -137,7 +168,7 @@ const ManangeAddUserContainer: React.FC = () => {
                         </Grid>
                     </Grid>
 
-                    {/* Skills */}
+                    {/* === Skills === */}
                     <Section title="Skills" />
                     <Grid container spacing={2}>
                         <Grid size={{ xs: 12, md: 4 }}>
@@ -151,7 +182,7 @@ const ManangeAddUserContainer: React.FC = () => {
                         </Grid>
                     </Grid>
 
-                    {/* Work Experience */}
+                    {/* === Work Experience === */}
                     <Accordion defaultExpanded sx={{ backgroundColor: COLORS.white.thin }}>
                         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                             <Section title="Work Experience" />
@@ -189,7 +220,7 @@ const ManangeAddUserContainer: React.FC = () => {
                         </AccordionDetails>
                     </Accordion>
 
-                    {/* Social Links */}
+                    {/* === Social Links === */}
                     <Accordion defaultExpanded sx={{ backgroundColor: COLORS.white.thin }}>
                         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                             <Section title="Social Links" />
@@ -218,9 +249,14 @@ const ManangeAddUserContainer: React.FC = () => {
                         </AccordionDetails>
                     </Accordion>
 
-                    {/* Submit Button */}
+
                     <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 3 }}>
-                        <CustomButton title="Submit" type="submit" />
+                        <CustomButton
+                            title={isPending ? "Creating..." : "Submit"}
+                            type="submit"
+                            disabled={isPending}
+                            endIcon={isPending ? <CircularProgress size={20} color="inherit" /> : undefined}
+                        />
                     </Box>
                 </Box>
             </Paper>
