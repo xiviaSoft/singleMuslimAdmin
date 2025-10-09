@@ -1,8 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
 import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 import { initializeApp } from "firebase/app";
-import { doc, serverTimestamp, setDoc } from "firebase/firestore";
-import { auth, db, firebaseConfig } from "libs";
+import { doc, setDoc, serverTimestamp } from "firebase/firestore";
+import { db, firebaseConfig } from "libs";
 import { FormData } from "types";
 
 const removeUndefined = (obj: Record<string, any>) =>
@@ -10,26 +10,28 @@ const removeUndefined = (obj: Record<string, any>) =>
 
 const toDate = (value: any): Date | null => {
     if (!value) return null;
-    // If value is already a Date, return it. Otherwise, convert from string.
     return value instanceof Date ? value : new Date(value);
 };
 
-const useCreateUser = (showToast: (msg: string, type: "success" | "error") => void) => {
+const useCreateUser = (
+    showToast: (msg: string, type: "success" | "error") => void
+) => {
     return useMutation({
         mutationFn: async (data: FormData) => {
-            // 🔹 Secondary app to prevent login swap
+
             const secondaryApp = initializeApp(firebaseConfig, "SecondaryApp");
             const secondaryAuth = getAuth(secondaryApp);
 
-            // 1️⃣ Create user in Firebase Auth
+            // Create user in Firebase Auth
             const userCredential = await createUserWithEmailAndPassword(
                 secondaryAuth,
                 data.email,
                 data.password
             );
+
             const uid = userCredential.user.uid;
 
-            // 2️⃣ Clean and normalize data
+            // Destructure fields
             const {
                 password,
                 companyName,
@@ -57,17 +59,19 @@ const useCreateUser = (showToast: (msg: string, type: "success" | "error") => vo
 
             const cleanedRest = removeUndefined(rest);
 
-            // 3️⃣ Save data in Firestore with proper date conversion
+            // Save user data with actual Date objects
             await setDoc(doc(db, "users", uid), {
                 ...cleanedRest,
                 uid,
                 isActive: true,
                 isSuspended: false,
+
+                // Firestore timestamps (auto-handled as Timestamps)
                 createdAt: serverTimestamp(),
                 updatedAt: serverTimestamp(),
                 lastLogin: serverTimestamp(),
 
-                // ✅ Ensure dateOfBirth is stored as a Date object
+                // Convert dateOfBirth to Date (not string)
                 dateOfBirth: toDate(dateOfBirth),
 
                 bio: bio || "",
@@ -80,9 +84,9 @@ const useCreateUser = (showToast: (msg: string, type: "success" | "error") => vo
                 workExperience: {
                     companyName: companyName || "",
                     role: role || "",
-                    startDate: toDate(startDate),
+                    startDate: startDate ? toDate(startDate) : null,
                     address: companyaddress || "",
-                    endDate: isCurrent ? null : toDate(endDate),
+                    endDate: isCurrent ? null : endDate ? toDate(endDate) : null,
                     isCurrent: isCurrent || false,
                     description: companydescription || "",
                 },
@@ -111,7 +115,7 @@ const useCreateUser = (showToast: (msg: string, type: "success" | "error") => vo
                 },
             });
 
-            // 4️⃣ Sign out secondary auth (prevents login swap)
+            // Sign out secondary auth to prevent conflicts
             await secondaryAuth.signOut();
         },
 

@@ -14,4 +14,5 @@ export { default as CustomSelect } from "./CustomSelect/CustomSelect";
 export { default as CustomChart } from "./CustomChart/CustomChart";
 export { default as CustomRadio } from "./CustomRadio/CustomRadio";
 export { default as MultipulCustomSelect } from "./MultipulCustomSelect/MultipulCustomSelect";
-
+export { default as CustomPagination } from "./CustomPagination/CustomPagination";
+export { default as CustomSort } from "./CustomSort/CustomSort";

@@ -5,16 +5,15 @@ export const COLORS = {
     hard: "#404746",
     hardDark: "#37474f",
     thin: "#D3E0D9",
-    lighter:'#D6EEDDFF'
+    lighter: "#D6EEDDFF",
   },
-  
 
   error: {
-      // main: "#F34F01",
+    // main: "#F34F01",
     main: "#FF7F50",
     dark: "#cb2c2c",
     orangeRed: "#EB9A7F",
-    light:'#EFC5B7'
+    light: "#EFC5B7",
   },
   white: {
     main: "#ffffff",

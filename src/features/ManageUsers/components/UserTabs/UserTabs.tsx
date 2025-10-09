@@ -1,24 +1,26 @@
-import * as React from 'react';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import { Box } from '@mui/material';
+import * as React from "react";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import { Box } from "@mui/material";
+import { tabStyle } from "utils";
 
-import { tabStyle } from 'utils';
+interface UserTabsProps {
+    value: string;
+    onChange: (value: string) => void;
+}
 
-const UserTabs = () => {
-    const [value, setValue] = React.useState('Active Users');
-
+const UserTabs = ({ value, onChange }: UserTabsProps) => {
     const handleChange = (_event: React.SyntheticEvent, newValue: string) => {
-        setValue(newValue);
+        onChange(newValue);
     };
 
     return (
         <Box
             sx={{
-                inlineSize: '100%',
-                overflowX: 'auto', // allow horizontal scroll if needed
-                display: 'flex',
-                justifyContent: 'center',
+                inlineSize: "100%",
+                overflowX: "auto",
+                display: "flex",
+                justifyContent: "center",
                 py: 1,
             }}
         >
@@ -28,12 +30,12 @@ const UserTabs = () => {
                 variant="scrollable"
                 scrollButtons="auto"
                 allowScrollButtonsMobile
-                TabIndicatorProps={{ style: { display: 'none' } }}
+                TabIndicatorProps={{ style: { display: "none" } }}
                 sx={tabStyle}
             >
                 <Tab value="Active Users" label="Active Users" />
                 <Tab value="Suspended Users" label="Suspended Users" />
-                <Tab value="UnSuspended Users" label="UnSuspended Users" />
+                {/* <Tab value="UnSuspended Users" label="UnSuspended Users" /> */}
             </Tabs>
         </Box>
     );

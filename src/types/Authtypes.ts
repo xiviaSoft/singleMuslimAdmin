@@ -4,7 +4,7 @@ export type FormData = {
   email: string;
   password: string;
   phoneNumber?: string;
-  dateOfBirth?: Date;
+  dateOfBirth?: Date ;
   gender: string;
   maritalStatus?: string;
   religion?: string;

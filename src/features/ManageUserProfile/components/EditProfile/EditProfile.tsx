@@ -14,61 +14,66 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useEffect, useState } from "react";
-import { CustomButton, CustomSelect, CustomTextField, MultipulCustomSelect } from "components";
-import { COLORS, GenderTypes, LANGUAGES, MARITAL_STATUS, RELIGION_OPTIONS, Religions, SoftSkills, TechnicalSkills } from "constant";
-
+import {
+    CustomButton,
+    CustomSelect,
+    CustomTextField,
+    MultipulCustomSelect,
+} from "components";
+import {
+    COLORS,
+    GenderTypes,
+    LANGUAGES,
+    MARITAL_STATUS,
+    Religions,
+    SoftSkills,
+    TechnicalSkills,
+} from "constant";
 import { useParams } from "react-router";
 import useUpdateUser from "features/ManageUserProfile/hooks/useUpdateUser";
 import { User } from "collections";
 import useUser from "features/ManageUserProfile/hooks/useUser";
 import { useToast } from "context";
-import { collection, doc, updateDoc } from "firebase/firestore";
+import { doc, Timestamp, updateDoc } from "firebase/firestore";
 import { db } from "libs";
-
 
 const Section = ({ title }: { title: string }) => (
     <Box sx={{ mb: 2 }}>
         <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
             {title}
         </Typography>
-        <Divider sx={{}} />
+        <Divider />
     </Box>
 );
 
 const EditProfile = () => {
-    const { showToast } = useToast()
-    const { id: UserId } = useParams()
+
+
+    const { showToast } = useToast();
+    const { id: UserId } = useParams();
+    const [disableWork, setDisableWork] = useState(false);
+    const [disableSocial, setDisableSocial] = useState(false);
     const updateUser = useUpdateUser(UserId || "");
     const { data: user, isLoading } = useUser(UserId || "");
     const methods = useForm<User>({
         defaultValues: user ?? {},
     });
-
-
     const { handleSubmit, reset } = methods;
 
-
-    const [disableWork, setDisableWork] = useState(false);
-    const [disableSocial, setDisableSocial] = useState(false);
-
-
-    const onSubmit = (data: User) => {
-        if (!UserId) return;
-        const cleanedData = Object.fromEntries(
-            Object.entries(data).filter(([_, v]) => v !== undefined)
-        );
-        updateUser.mutate(cleanedData as Partial<User>);
-        showToast("user updated successfully", "success");
-
+    const toDateInputValue = (value: any): string | "" => {
+        if (!value) return "";
+        const date = value instanceof Timestamp ? value.toDate() : new Date(value);
+        return date.toISOString().split("T")[0];
     };
+
+
     const suspendUser = async () => {
         if (!UserId) return;
-
         try {
             const userRef = doc(db, "users", UserId);
             await updateDoc(userRef, {
                 isSuspended: true,
-                isActive:false
+                isActive: false,
             });
             showToast("User suspended successfully", "warning");
         } catch (error) {
@@ -76,14 +81,39 @@ const EditProfile = () => {
             showToast("Failed to suspend user", "error");
         }
     };
+
     useEffect(() => {
         if (user) {
-            reset(user);
+            const formattedUser: Partial<User> & Record<string, any> = {
+                ...user,
+                dateOfBirth: toDateInputValue(user.dateOfBirth),
+                updatedAt: toDateInputValue(user.updatedAt),
+                lastLogin: toDateInputValue(user.lastLogin),
+                createdAt: toDateInputValue(user.createdAt),
+                workExperience: user.workExperience
+                    ? {
+                        ...user.workExperience,
+                        startDate: toDateInputValue(user.workExperience.startDate),
+                        endDate: toDateInputValue(user.workExperience.endDate),
+                    }
+                    : undefined,
+            };
+            reset(formattedUser);
         }
     }, [user, reset]);
 
+    const onSubmit = (data: User) => {
+        if (!UserId) return;
+
+        const cleanedData = Object.fromEntries(
+            Object.entries(data).filter(([_, v]) => v !== undefined)
+        );
+        updateUser.mutate(cleanedData as Partial<User>);
+        showToast("User updated successfully", "success");
+    };
+
     if (isLoading) return <p>Loading...</p>;
-    console.log(user, 'user')
+
     return (
         <FormProvider {...methods}>
             <Paper
@@ -93,7 +123,6 @@ const EditProfile = () => {
                     mx: "auto",
                     p: 4,
                     borderRadius: 3,
-                    // backgroundColor: "#fafafa",
                     backgroundColor: COLORS.white.thin,
                 }}
             >
@@ -106,10 +135,9 @@ const EditProfile = () => {
                     onSubmit={handleSubmit(onSubmit)}
                     sx={{ display: "flex", flexDirection: "column", gap: 2 }}
                 >
-                    {/* Personal Details */}
+                    {/* ---------------- PERSONAL DETAILS ---------------- */}
                     <Section title="Personal Details" />
                     <Grid container spacing={2}>
-                        {/* --- Personal Info Fields (same as before) --- */}
                         <Grid size={{ md: 6, xs: 12 }}>
                             <CustomTextField
                                 name="firstName"
@@ -128,19 +156,7 @@ const EditProfile = () => {
                                 rules={{ required: "Last name is required" }}
                             />
                         </Grid>
-                        <Grid size={{ md: 6, xs: 12 }}>
-                            <CustomTextField name="email" label="Email" type="email" placeholder="enter you email" />
-                        </Grid>
-                        <Grid size={{ md: 6, xs: 12 }}>
-                            <CustomTextField
-                                name="phoneNumber"
-                                label="Phone Number"
-                                type="text"
-                                placeholder="Enter phone number"
-                                allowOnly="numeric"
-                                maxLength={11}
-                            />
-                        </Grid>
+
                         <Grid size={{ md: 6, xs: 12 }}>
                             <CustomSelect
                                 name="religion"
@@ -151,6 +167,7 @@ const EditProfile = () => {
                                 }))}
                             />
                         </Grid>
+
                         <Grid size={{ md: 6, xs: 12 }}>
                             <CustomSelect
                                 name="gender"
@@ -161,9 +178,16 @@ const EditProfile = () => {
                                 }))}
                             />
                         </Grid>
+
                         <Grid size={{ md: 6, xs: 12 }}>
-                            <CustomTextField name="dateOfBirth" label="Date of Birth" type="date" placeholder="" />
+                            <CustomTextField
+                                name="dateOfBirth"
+                                label="Date of Birth"
+                                type="date"
+                                placeholder=""
+                            />
                         </Grid>
+
                         <Grid size={{ md: 6, xs: 12 }}>
                             <CustomSelect
                                 name="maritalStatus"
@@ -174,6 +198,7 @@ const EditProfile = () => {
                                 }))}
                             />
                         </Grid>
+
                         <Grid size={12}>
                             <CustomTextField
                                 name="address"
@@ -184,6 +209,7 @@ const EditProfile = () => {
                                 minRows={2}
                             />
                         </Grid>
+
                         <Grid size={12}>
                             <CustomTextField
                                 name="bio"
@@ -196,7 +222,7 @@ const EditProfile = () => {
                         </Grid>
                     </Grid>
 
-                    {/* Education */}
+                    {/* ---------------- EDUCATION ---------------- */}
                     <Section title="Education" />
                     <Grid container spacing={2}>
                         <Grid size={{ md: 6, xs: 12 }}>
@@ -233,38 +259,45 @@ const EditProfile = () => {
                         </Grid>
                     </Grid>
 
-                    {/* Skills */}
+                    {/* ---------------- SKILLS ---------------- */}
                     <Section title="Skills" />
                     <Grid container spacing={2}>
-                        <Grid size={{ xs: 12, md: 4 }} >
+                        <Grid size={{ xs: 12, md: 4 }}>
                             <MultipulCustomSelect
                                 name="skills.languages"
                                 label="Languages"
-
-                                options={LANGUAGES.map((item) => ({ label: item, value: item }))}
+                                options={LANGUAGES.map((item) => ({
+                                    label: item,
+                                    value: item,
+                                }))}
                             />
                         </Grid>
-                        <Grid size={{ xs: 12, md: 4 }} >
+                        <Grid size={{ xs: 12, md: 4 }}>
                             <MultipulCustomSelect
                                 name="skills.softSkills"
                                 label="Soft Skills"
-                                options={SoftSkills.map((item) => ({ label: item, value: item }))}
+                                options={SoftSkills.map((item) => ({
+                                    label: item,
+                                    value: item,
+                                }))}
                             />
                         </Grid>
-                        <Grid size={{ xs: 12, md: 4 }} >
+                        <Grid size={{ xs: 12, md: 4 }}>
                             <MultipulCustomSelect
                                 name="skills.technicalSkills"
                                 label="Technical Skills"
-                                options={TechnicalSkills.map((item) => ({ label: item, value: item }))}
+                                options={TechnicalSkills.map((item) => ({
+                                    label: item,
+                                    value: item,
+                                }))}
                             />
                         </Grid>
                     </Grid>
 
-                    {/* Work Experience (Accordion + Checkbox) */}
-                    <Accordion defaultExpanded sx={{ backgroundColor: COLORS.white.thin, }}>
+                    {/* ---------------- WORK EXPERIENCE ---------------- */}
+                    <Accordion defaultExpanded sx={{ backgroundColor: COLORS.white.thin }}>
                         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                             <Section title="Work Experience" />
-
                             <FormControlLabel
                                 control={
                                     <Checkbox
@@ -274,7 +307,7 @@ const EditProfile = () => {
                                 }
                                 label="Disable"
                                 onClick={(e) => e.stopPropagation()}
-                                sx={{ ml: 'auto' }}
+                                sx={{ ml: "auto" }}
                             />
                         </AccordionSummary>
                         <AccordionDetails>
@@ -308,15 +341,6 @@ const EditProfile = () => {
                                 </Grid>
                                 <Grid size={{ md: 6, xs: 12 }}>
                                     <CustomTextField
-                                        name="workExperience.isCurrent"
-                                        label="Currently Working"
-                                        type="text"
-                                        placeholder="Enter address"
-                                        disabled={disableWork}
-                                    />
-                                </Grid>
-                                <Grid size={{ md: 6, xs: 12 }}>
-                                    <CustomTextField
                                         name="workExperience.startDate"
                                         label="Start Date"
                                         type="date"
@@ -333,6 +357,15 @@ const EditProfile = () => {
                                         placeholder=""
                                     />
                                 </Grid>
+                                <Grid size={{ md: 6, xs: 12 }}>
+                                    <CustomTextField
+                                        name="workExperience.isCurrent"
+                                        label="Is Current"
+                                        type="text"
+                                        disabled={disableWork}
+                                        placeholder=""
+                                    />
+                                </Grid>
                                 <Grid size={12}>
                                     <CustomTextField
                                         name="workExperience.description"
@@ -342,30 +375,26 @@ const EditProfile = () => {
                                         multiline
                                         minRows={2}
                                         disabled={disableWork}
-
                                     />
                                 </Grid>
                             </Grid>
                         </AccordionDetails>
                     </Accordion>
 
-                    {/* Social Links (Accordion + Checkbox) */}
-                    <Accordion defaultExpanded sx={{ backgroundColor: COLORS.white.thin, }}>
+                    {/* ---------------- SOCIAL LINKS ---------------- */}
+                    <Accordion defaultExpanded sx={{ backgroundColor: COLORS.white.thin }}>
                         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                             <Section title="Social Links" />
-                            {/* <Section sx={{ flexGrow: 1 }}>Social Links</Section> */}
-
                             <FormControlLabel
                                 control={
                                     <Checkbox
                                         checked={disableSocial}
                                         onChange={(e) => setDisableSocial(e.target.checked)}
-
                                     />
                                 }
                                 label="Disable"
                                 onClick={(e) => e.stopPropagation()}
-                                sx={{ ml: 'auto' }}
+                                sx={{ ml: "auto" }}
                             />
                         </AccordionSummary>
                         <AccordionDetails>
@@ -410,23 +439,22 @@ const EditProfile = () => {
                         </AccordionDetails>
                     </Accordion>
 
+                    {/* ---------------- BUTTONS ---------------- */}
                     <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 3 }}>
-                        <Stack direction={'row'} gap={2}>
-                            <CustomButton title="Suspend User" variant="outlined" onClick={suspendUser} />
+                        <Stack direction="row" gap={2}>
+                            <CustomButton
+                                title="Suspend User"
+                                variant="outlined"
+                                onClick={suspendUser}
+                            />
                             <CustomButton title="Delete User" background={COLORS.error.dark} />
                             <CustomButton title="Update Profile" type="submit" />
                         </Stack>
-                        {/* <Button type="submit" variant="contained">
-                            Update Profile
-                        </Button> */}
-
                     </Box>
                 </Box>
             </Paper>
-
         </FormProvider>
     );
 };
-
 
 export default EditProfile;

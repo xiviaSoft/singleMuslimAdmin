@@ -44,7 +44,7 @@ const ManangeAddUserContainer: React.FC = () => {
             email: "",
             password: "",
             phoneNumber: "",
-            dateOfBirth: new Date(), // ✅ must be a Date object
+            dateOfBirth: new Date(),
             gender: "",
             maritalStatus: "",
             religion: "",
@@ -56,7 +56,7 @@ const ManangeAddUserContainer: React.FC = () => {
             companyaddress: "",
             companydescription: "",
             institutionName: "",
-            graduationYear: new Date().getFullYear(), // ✅ number
+            graduationYear: new Date().getFullYear(),
             fieldOfStudy: "",
             bio: "",
             role: "",

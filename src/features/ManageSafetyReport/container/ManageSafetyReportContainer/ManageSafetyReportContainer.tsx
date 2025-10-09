@@ -1,18 +1,27 @@
-import { KeyboardArrowDown, Tune, ErrorOutline } from "@mui/icons-material";
-import { Box, CircularProgress, Stack, Typography, Button } from "@mui/material";
+import { ErrorOutline } from "@mui/icons-material";
+import {
+    Box,
+    CircularProgress,
+    Stack,
+    Typography,
+    Button,
+} from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import {
-    CustomButton,
-    CustomDialogBox,
+ 
+    CustomPagination,
+    CustomSort,
     CustomTable,
     PageHeader,
 } from "components";
 import { REPORT_TABLE_DATA, ROUTES } from "constant";
-import { UserDetailTab } from "features/ManageUsers/components";
+
 import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { db } from "libs";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useParams } from "react-router";
+
+
 
 // ✅ TypeScript types
 interface Report {
@@ -34,6 +43,10 @@ interface UserData {
 
 const ManageSafetyReportContainer = () => {
     const [showLogout, setShowLogout] = useState(false);
+    const [sortBy, setSortBy] = useState("User Name");
+    const [currentPage, setCurrentPage] = useState(1);
+    const rowsPerPage = 5;
+
     const { id } = useParams();
 
     const handleLogout = () => {
@@ -41,7 +54,7 @@ const ManageSafetyReportContainer = () => {
         setShowLogout(false);
     };
 
-
+    // ✅ Fetch reports with user data
     const { data: reports = [], isLoading, isError, refetch } = useQuery<MergedReport[]>({
         queryKey: ["safetyReportsWithUsers"],
         queryFn: async () => {
@@ -84,27 +97,49 @@ const ManageSafetyReportContainer = () => {
         },
     });
 
+    const sortKeyMap: Record<string, keyof MergedReport> = {
+        "User Name": "userName",
+        "Status": "status",
+        "Reason": "reason",
+    };
+
+    const sortedReports = useMemo(() => {
+        const sorted = [...reports];
+        const key = sortKeyMap[sortBy];
+        sorted.sort((a, b) => {
+            const valueA = (a[key] ?? "").toString().toLowerCase();
+            const valueB = (b[key] ?? "").toString().toLowerCase();
+            return valueA.localeCompare(valueB);
+        });
+        return sorted;
+    }, [reports, sortBy]);
+
+    // ✅ Pagination logic
+    const paginatedReports = useMemo(() => {
+        const start = (currentPage - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+        return sortedReports.slice(start, end);
+    }, [sortedReports, currentPage]);
+
+    const totalPages = Math.ceil(sortedReports.length / rowsPerPage);
+
     return (
-        <Box >
+        <Box>
             <PageHeader title="Safety Reports" />
 
-
-            <Stack direction="row" sx={{ justifyContent: "end", gap: "10px", mb: 3 }}>
-                <CustomButton variant="outlined" title="Filter" endIcon={<Tune />} />
-                <CustomButton variant="contained" title="Sort By" endIcon={<KeyboardArrowDown />} />
+    
+            <Stack direction="row" justifyContent="flex-end" sx={{ mb: 3 }}>
+                <CustomSort
+                    value={sortBy}
+                    onChange={(value) => {
+                        setSortBy(value);
+                        setCurrentPage(1);
+                    }}
+                    options={["User Name", "Status", "Reason"]}
+                />
             </Stack>
 
-            <CustomDialogBox
-                open={showLogout}
-                title="Edit your detail?"
-                onClose={() => setShowLogout(false)}
-                onConfirm={handleLogout}
-                confirmText="Yes, Edit"
-            >
-                <UserDetailTab />
-            </CustomDialogBox>
-
-
+    
             {isLoading && (
                 <Box
                     sx={{
@@ -126,7 +161,7 @@ const ManageSafetyReportContainer = () => {
                 </Box>
             )}
 
-
+        
             {isError && (
                 <Box
                     sx={{
@@ -150,13 +185,20 @@ const ManageSafetyReportContainer = () => {
                 </Box>
             )}
 
-
             {!isLoading && !isError && (
-                <CustomTable
-                    columns={REPORT_TABLE_DATA}
-                    rows={reports as any[]}
-                    navigateClick={`${ROUTES.SAFETY_DETAILS}`}
-                />
+                <>
+                    <CustomTable
+                        columns={REPORT_TABLE_DATA}
+                        rows={paginatedReports as any[]}
+                        navigateClick={`${ROUTES.SAFETY_DETAILS}`}
+                    />
+
+                    <CustomPagination
+                        page={currentPage}
+                        count={totalPages}
+                        onChange={(_, page) => setCurrentPage(page)}
+                    />
+                </>
             )}
         </Box>
     );

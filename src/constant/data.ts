@@ -664,7 +664,7 @@ export const DATAING_USER_DATA = [
   { month: "Nov", totalUsers: 10500, activeUsers: 8300, inactiveUsers: 2200 },
   { month: "Dec", totalUsers: 12000, activeUsers: 9500, inactiveUsers: 2500 },
 ];
-export const GENDER = ["Male", "Female"];
+export const GENDER = ["male", "female"];
 
 export const sections = [
   {
