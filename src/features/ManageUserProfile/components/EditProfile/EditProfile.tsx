@@ -60,11 +60,12 @@ const EditProfile = () => {
     });
     const { handleSubmit, reset } = methods;
 
-    const toDateInputValue = (value: any): string | "" => {
-        if (!value) return "";
-        const date = value instanceof Timestamp ? value.toDate() : new Date(value);
-        return date.toISOString().split("T")[0];
-    };
+  
+  const toDateInputValue = (value: any): string | "" => {
+    if (!value) return "";
+    const date = value instanceof Timestamp ? value.toDate() : new Date(value);
+    return date.toISOString().split("T")[0];
+  };
 
 
     const suspendUser = async () => {
@@ -82,26 +83,41 @@ const EditProfile = () => {
         }
     };
 
-    useEffect(() => {
-        if (user) {
-            const formattedUser: Partial<User> & Record<string, any> = {
-                ...user,
-                dateOfBirth: toDateInputValue(user.dateOfBirth),
-                updatedAt: toDateInputValue(user.updatedAt),
-                lastLogin: toDateInputValue(user.lastLogin),
-                createdAt: toDateInputValue(user.createdAt),
-                workExperience: user.workExperience
-                    ? {
-                        ...user.workExperience,
-                        startDate: toDateInputValue(user.workExperience.startDate),
-                        endDate: toDateInputValue(user.workExperience.endDate),
-                    }
-                    : undefined,
-            };
-            reset(formattedUser);
-        }
-    }, [user, reset]);
-
+    // useEffect(() => {
+    //     if (user) {
+    //         const formattedUser: Partial<User> & Record<string, any> = {
+    //             ...user,
+    //             dateOfBirth: toDateInputValue(user.dateOfBirth),
+    //             updatedAt: toDateInputValue(user.updatedAt),
+    //             lastLogin: toDateInputValue(user.lastLogin),
+    //             createdAt: toDateInputValue(user.createdAt),
+    //             workExperience: user.workExperience
+    //                 ? {
+    //                     ...user.workExperience,
+    //                     startDate: toDateInputValue(user.workExperience.startDate),
+    //                     endDate: toDateInputValue(user.workExperience.endDate),
+    //                 }
+    //                 : undefined,
+    //         };
+    //         reset(formattedUser);
+    //     }
+    // }, [user, reset]);
+  useEffect(() => {
+    if (user) {
+      const formattedUser: Partial<User> & Record<string, any> = {
+        ...user,
+        dateOfBirth: toDateInputValue(user.dateOfBirth),
+        workExperience: user.workExperience
+          ? {
+            ...user.workExperience,
+            startDate: toDateInputValue(user.workExperience.startDate),
+            endDate: toDateInputValue(user.workExperience.endDate),
+          }
+          : undefined,
+      };
+      reset(formattedUser);
+    }
+  }, [user, reset]);
     const onSubmit = (data: User) => {
         if (!UserId) return;
 

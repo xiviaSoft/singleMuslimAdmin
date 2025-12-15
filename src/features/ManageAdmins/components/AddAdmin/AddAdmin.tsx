@@ -14,8 +14,8 @@ const AddAdmin = ({ mode = "add" }: AddAdminProps) => {
                 label="Select Role"
                 labelOutside={true}
                 options={ADMIN_ROLE.map((item) => ({
-                    label: item,
-                    value: item,
+                    label: item.label,
+                    value: item.value,
                 }))}
             />
             <CustomTextField

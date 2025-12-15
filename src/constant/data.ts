@@ -43,32 +43,31 @@ export const PERMISSON_DATA = [
 ];
 
 export const REPORT_TABLE_DATA = [
-
-    // { label: "COMPANY NAME", field: "companyName" },
-    { label: "USER NAME", field: "userName" },
-    { label: "SUBJECT", field: "details" },
-    { label: "CATEGORY", field: "reason" },
-    // { label: "CONTENT", field: "content" },
-    { label: "STATUS", field: "status" },
-  ]
-  // rows: [
-  //   {
-  //     companyName: "Coral Design",
-  //     userName: "Lance Stroll",
-  //     subject: "I found out he was not part",
-  //     category: "Misuse",
-  //     content: "User Profile",
-  //     status: "Open",
-  //   },
-  //   ...Array(7).fill({
-  //     companyName: "Coral Design",
-  //     userName: "Lance Stroll",
-  //     subject: "I found out he was not part",
-  //     category: "Unrecognized User",
-  //     content: "Comment",
-  //     status: "New",
-  //   }),
-  // ],
+  // { label: "COMPANY NAME", field: "companyName" },
+  { label: "USER NAME", field: "userName" },
+  { label: "SUBJECT", field: "details" },
+  { label: "CATEGORY", field: "reason" },
+  // { label: "CONTENT", field: "content" },
+  { label: "STATUS", field: "status" },
+];
+// rows: [
+//   {
+//     companyName: "Coral Design",
+//     userName: "Lance Stroll",
+//     subject: "I found out he was not part",
+//     category: "Misuse",
+//     content: "User Profile",
+//     status: "Open",
+//   },
+//   ...Array(7).fill({
+//     companyName: "Coral Design",
+//     userName: "Lance Stroll",
+//     subject: "I found out he was not part",
+//     category: "Unrecognized User",
+//     content: "Comment",
+//     status: "New",
+//   }),
+// ],
 
 // export const USER_TABLE_DATA_COLUMNS = [
 //   { label: "Profile", field: `firstName ` },
@@ -730,7 +729,13 @@ export const sections = [
   },
 ];
 
-export const ADMIN_ROLE = ["super_admin", "moderator", "support", "editor"];
+export const ADMIN_ROLE = [
+  { value: "super_admin", label: "Super Admin" },
+  { value: "moderator", label: "Moderator" },
+  { value: "support", label: "Support" },
+  { value: "editor", label: "Editor" },
+];
+
 export const GenderTypes = ["male", "female"];
 export const SoftSkills: string[] = [
   "Communication",

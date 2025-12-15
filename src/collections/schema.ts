@@ -8,10 +8,68 @@ import {
   NotificationCreatedByInfo,
   NotificationType,
   ReasonType,
-  Skills,
   WorkerExperience,
+  SkillsType,
 } from "./enums";
 
+// export interface User {
+//   uid: string;
+//   firstName: string;
+//   lastName: string;
+//   email: string;
+//   phoneNumber?: string;
+//   profileImageData: UserProfileImage;
+//   userGallery?: Array<UserProfileImage>;
+//   gender: Gender;
+//   dateOfBirth: Date | string;
+//   maritalStatus: MaritalStatus;
+//   address?: string;
+//   bio?: string; //Short biography or description
+//   socialLinks?: {
+//     facebook?: string;
+//     twitter?: string;
+//     linkedin?: string;
+//     instagram?: string;
+//     [key: string]: string | undefined; // For any additional social links
+//   };
+
+//   createdAt: Date; //firebase server timestamp
+//   updatedAt: Date; //firebase server timestamp
+//   lastLogin: Date; //firebase server timestamp
+//   isActive: boolean;
+//   isSuspended: boolean;
+//   suspendedInformation?: {
+//     reason: ReasonType;
+//     suspendedAt: Date;
+//     suspendedBy: string; //need to change it to firebase ref
+//     suspendingDuration?: string; //e.g., "7 days", "indefinite"
+//     details: string; //additional details about suspension
+//   };
+//   location: {
+//     city?: string;
+//     state?: string;
+//     country?: string;
+//     zipCode?: string;
+//     addressLine1?: string;
+//     addressLine2?: string;
+//     coordinates?: {
+//       latitude: GeolocationPosition["coords"]["latitude"];
+//       longitude: GeolocationPosition["coords"]["longitude"];
+//     };
+//   };
+//   educationInformation: Education;
+//   workExperience?: WorkerExperience[];
+//   skills?: Skills;
+//   preferences?: {
+//     language?: string;
+//     notifications?: {
+//       email: boolean;
+//       sms: boolean;
+//       push: boolean;
+//     };
+//   };
+//   religion: string;
+// }
 export interface User {
   uid: string;
   firstName: string;
@@ -21,7 +79,7 @@ export interface User {
   profileImageData: UserProfileImage;
   userGallery?: Array<UserProfileImage>;
   gender: Gender;
-  dateOfBirth: Date;
+  dateOfBirth: Date | string;
   maritalStatus: MaritalStatus;
   address?: string;
   bio?: string; //Short biography or description
@@ -32,7 +90,7 @@ export interface User {
     instagram?: string;
     [key: string]: string | undefined; // For any additional social links
   };
-
+  hideProfile: boolean;
   createdAt: Date; //firebase server timestamp
   updatedAt: Date; //firebase server timestamp
   lastLogin: Date; //firebase server timestamp
@@ -58,10 +116,10 @@ export interface User {
     };
   };
   educationInformation: Education;
-  workExperience?: WorkerExperience[];
-  skills?: Skills;
+  workExperience?: WorkerExperience;
+  skills?: SkillsType;
+  language?: string;
   preferences?: {
-    language?: string;
     notifications?: {
       email: boolean;
       sms: boolean;
@@ -69,6 +127,9 @@ export interface User {
     };
   };
   religion: string;
+  blocked?: string[];
+  likes?: string[]; // Array of user IDs that this user has liked
+  visits?: string[]; // Array of user IDs that this user has visited
 }
 export interface Admin {
   adminId: string;
