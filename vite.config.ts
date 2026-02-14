@@ -15,6 +15,9 @@ export default defineConfig((
 
   return {
     plugins: [react()],
+      build: {
+    outDir: "build", // 👈 change output folder name
+  },
     resolve: {
       alias: {
         components: path.resolve(__dirname, 'src/components'),
