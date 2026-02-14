@@ -5,6 +5,7 @@ interface ButtonTypes extends ButtonProps {
     title?: string;
     textColor?: string;
     background?: string;
+    onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 const CustomButton = ({
@@ -34,8 +35,9 @@ const CustomButton = ({
                     color: textColor ? textColor : COLORS.white.main,
                 }),
                 ...(variant === "outlined" && {
-                    border: "1px solid #315D57",
-                    color: "#315D57",
+                    // border: "1px solid #315D57",
+                    border:`1px solid ${COLORS.primary.main}`,
+                    color: "COLORS.primary.main",
                     backgroundColor: "transparent",
                 }),
             }}

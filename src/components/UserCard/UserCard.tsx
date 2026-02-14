@@ -6,12 +6,22 @@ import { Logout, } from "@mui/icons-material";
 import CustomDialogBox from "components/CustomDialogBox/CustomDialogBox";
 import MoreVertMenu from "components/MoreVertMenu/MoreVertMenu";
 
-const UserCard = () => {
-  const [showLogout, setShowLogout] = useState(false);
+import { useNavigate } from "react-router";
+import { ROUTES } from "constant";
+import { useAuth } from "context/AuthContext";
 
+
+const UserCard = () => {
+  const { logout } = useAuth()
+  const [showLogout, setShowLogout] = useState(false);
+  const naviagte = useNavigate()
+
+  const { user } = useAuth()
 
   const handleLogout = () => {
-    console.log("User logged out");
+
+    logout()
+    naviagte(ROUTES.LOGIN)
     setShowLogout(false);
   };
 
@@ -27,10 +37,13 @@ const UserCard = () => {
 
       <Stack flexGrow={1}>
         <Typography sx={{ fontWeight: 500, fontSize: "18px", color: COLORS.primary.hard }}>
-          Sahar
+
+          {user?.firstName} <span style={{ textTransform: 'lowercase' }}>
+            {user?.lastName}
+          </span>
         </Typography>
         <Typography variant="body2" color={COLORS.primary.hard}>
-          Super Admin
+          {user?.role}
         </Typography>
       </Stack>
 

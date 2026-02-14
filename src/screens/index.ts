@@ -8,3 +8,4 @@ export { default as NewPassword } from "./NewPassword/NewPassword";
 export { default as ReportDetails } from "./ReportDetails/ReportDetails";
 export { default as Analytics } from "./Analytics/Analytics";
 export { default as UserProfile } from "./UserProfile/UserProfile";
+export { default as AddUser } from "./AddUser/AddUser";

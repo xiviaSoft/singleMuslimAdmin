@@ -14,7 +14,7 @@ const CustomDateSentAndCategory = ({ categoryTitle, title }: CardType) => {
     return (
 
 
-        <Stack gap={'16px'}>
+        <Stack gap={'16px'} width={'100%'}>
             <Typography sx={{ fontSize: '11px', fontWeight: 500 }}>
                 {categoryTitle}
             </Typography>
@@ -37,16 +37,16 @@ const CustomDateSentAndCategory = ({ categoryTitle, title }: CardType) => {
 
 
 
-const DateSentAndCategory = () => {
-    return (
-        <Grid container spacing={9}>
-            {DATA_SENT.map((item, index) => (
-                <Grid key={index} size={{ xs: 12, sm: 5 }} >
-                    <CustomDateSentAndCategory categoryTitle={item.categoryTitle} title={item.title} />
-                </Grid>
-            ))}
-        </Grid>
-    )
-}
+// const DateSentAndCategory = () => {
+//     return (
+//         <Grid container spacing={9}>
+//             {DATA_SENT.map((item, index) => (
+//                 <Grid key={index} size={{ xs: 12, sm: 5 }} >
+//                     <CustomDateSentAndCategory categoryTitle={item.categoryTitle} title={item.title} />
+//                 </Grid>
+//             ))}
+//         </Grid>
+//     )
+// }
 
-export default DateSentAndCategory
+export default CustomDateSentAndCategory

@@ -7,7 +7,7 @@ interface CustomDialogBoxProps {
     title: string;
     children: React.ReactNode;
     onClose: () => void;
-    onConfirm?: () => void;
+    onConfirm?: (data: any) =>  any | void;
     confirmText?: string;
     cancelText?: string;
     icon?: React.ReactNode;
@@ -81,7 +81,7 @@ export const CustomDialogBox: React.FC<CustomDialogBoxProps> = ({
 
 
                     "&::-webkit-scrollbar": {
-                        width: "6px",
+                        inlineSize: "6px",
                     },
                     "&::-webkit-scrollbar-track": {
                         background: COLORS.white.main,

@@ -1,5 +1,6 @@
 
 
+import { Typography } from "@mui/material"
 import { CustomSelect } from "components"
 import { BUILD_OPTIONS, DISABILITIES, EDUCATION_LEVEL, EYE_COLORS, HAIR_COLORS, HEIGHTS_OPTIONS, SMOKE_OPTIONS } from "constant"
 
@@ -8,12 +9,19 @@ import { FormProvider, useForm } from "react-hook-form"
 
 
 const EducationInfo = () => {
-    const methods = useForm()
+    // const methods = useForm(
+    //     {defaultValues:{
+    //         EducationLevel: EDUCATION_LEVEL[0],
+    //         mySubject: ""
+    //     }}
+    // )
     return (
 
         <div>
-            <FormProvider {...methods}>
-
+            {/* <FormProvider {...methods}> */}
+<Typography>
+    Education Info
+</Typography>
                 <CustomSelect
                     name="EducationLevel"
                     label="My Education Level"
@@ -38,7 +46,7 @@ const EducationInfo = () => {
 
 
 
-            </FormProvider>
+            {/* </FormProvider> */}
         </div>
     )
 }

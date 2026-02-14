@@ -24,6 +24,8 @@ const AsideBar = () => {
                 alignItems: "center",
                 pt: "50px",
                 gap: "15px",
+                borderRadius:'14px',
+
 
             }}
             className="iconBox"
@@ -68,7 +70,7 @@ const AsideBar = () => {
             <>
 
                 <IconButton
-                    sx={{ alignSelf:'self-start', }}
+                    sx={{ alignSelf: 'self-start', }}
                     onClick={() => setOpen(true)}
                 >
                     <MenuIcon sx={{ fontSize: 30 }} />
@@ -90,17 +92,18 @@ const AsideBar = () => {
     return (
         <Stack
             component={"aside"}
-            sx={{
-                bgcolor: COLORS.primary.light,
-                height: "100vh",
-                width: "100px",
-                margin: "5px",
-                position: "fixed",
-                borderRadius: "14px",
-                alignItems: "center",
-                pt: "50px",
-                gap: "15px",
-            }}
+        sx={{
+    position: "fixed",
+    top: "5px",
+    bottom: "5px",  // ✅ leaves space so bottom radius shows
+    left: "5px",
+    width: "100px",
+    bgcolor: COLORS.primary.light,
+    borderRadius: "14px",
+    alignItems: "center",
+    pt: "50px",
+    gap: "15px",
+  }}
         >
             {renderNavItems()}
         </Stack>

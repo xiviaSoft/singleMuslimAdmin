@@ -6,10 +6,31 @@ import { COLORS } from 'constant/color';
 import AccountInformation from '../AccountInformation/AccountInformation';
 import PersonalInformation from '../PersonalInformation/PersonalInformation';
 import IndividualAnalytics from '../IndividualAnalytics/IndividualAnalytics';
+import { useParams } from 'react-router';
+import { useQuery } from '@tanstack/react-query';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from 'libs';
+
 
 const ProfileTabs = () => {
     const [value, setValue] = React.useState('UserProfile');
+    const { id } = useParams()
+    const fetchUserData = async () => {
+        if (!id) return null;
+        const userDoc = doc(db, 'users', id);
+        const userDetail = await getDoc(userDoc);
+        return userDetail.data();
+    }
+    const { data } = useQuery({
+        queryKey: ['user', id],
+        queryFn: fetchUserData,
+    })
 
+    console.log(data, 'this is user data')
+    console.log(id, 'this is the user id')
+
+
+    const { email, phoneNumber } = data || {}
     const handleChange = (_event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue);
     };
@@ -60,9 +81,9 @@ const ProfileTabs = () => {
             {value === 'UserProfile' && (
                 <Stack>
 
-                    <AccountInformation />
-                    <Divider/>
-                    <PersonalInformation />
+                    <AccountInformation email={email} phoneNumber={phoneNumber} />
+                    <Divider />
+                    <PersonalInformation data={data} />
                 </Stack>
 
             )

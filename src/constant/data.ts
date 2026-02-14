@@ -42,59 +42,77 @@ export const PERMISSON_DATA = [
   "View Analytics & Statistics",
 ];
 
-export const REPORT_TABLE_DATA = {
-  columns: [
-    { label: "COMPANY NAME", field: "companyName" },
-    { label: "USER NAME", field: "userName" },
-    { label: "SUBJECT", field: "subject" },
-    { label: "CATEGORY", field: "category" },
-    { label: "CONTENT", field: "content" },
-    { label: "STATUS", field: "status" },
-  ],
-  rows: [
-    {
-      companyName: "Coral Design",
-      userName: "Lance Stroll",
-      subject: "I found out he was not part",
-      category: "Misuse",
-      content: "User Profile",
-      status: "Open",
-    },
-    ...Array(7).fill({
-      companyName: "Coral Design",
-      userName: "Lance Stroll",
-      subject: "I found out he was not part",
-      category: "Unrecognized User",
-      content: "Comment",
-      status: "New",
-    }),
-  ],
-};
-export const USER_TABLE_DATA = {
-  columns: [
-    { label: "Company Name / NAME", field: "name" },
-    { label: "Email", field: "email" },
-    { label: "Phone", field: "phone" },
-    { label: "Subscription / Position", field: "subscription" },
-    { label: "STATUS", field: "status" },
-  ],
-  rows: [
-    {
-      name: "Jon Snow",
-      email: "sahar@chopdawg.com",
-      phone: "+1 (000) 279-1434",
-      subscription: "Premium",
-      status: "Active",
-    },
-    ...Array(5).fill({
-      name: "Jon Snow",
-      email: "sahar@chopdawg.com",
-      phone: "+1 (000) 279-1434",
-      subscription: "Premium",
-      status: "Active",
-    }),
-  ],
-};
+export const REPORT_TABLE_DATA = [
+  // { label: "COMPANY NAME", field: "companyName" },
+  { label: "USER NAME", field: "userName" },
+  { label: "SUBJECT", field: "details" },
+  { label: "CATEGORY", field: "reason" },
+  // { label: "CONTENT", field: "content" },
+  { label: "STATUS", field: "status" },
+];
+// rows: [
+//   {
+//     companyName: "Coral Design",
+//     userName: "Lance Stroll",
+//     subject: "I found out he was not part",
+//     category: "Misuse",
+//     content: "User Profile",
+//     status: "Open",
+//   },
+//   ...Array(7).fill({
+//     companyName: "Coral Design",
+//     userName: "Lance Stroll",
+//     subject: "I found out he was not part",
+//     category: "Unrecognized User",
+//     content: "Comment",
+//     status: "New",
+//   }),
+// ],
+
+// export const USER_TABLE_DATA_COLUMNS = [
+//   { label: "Profile", field: `firstName ` },
+//   { label: "Gender", field: "gender" },
+//   { label: "Age", field: "dateOfBirth" },
+//   { label: "Marital Status", field: "maritalStatus" },
+//   { label: "Subscription", field: "subscription" },
+//   { label: "Location", field: "Locatoin" },
+//   { label: "Education", field: "educationInformation.highestDegree" },
+//   { label: "Status", field: "status" },
+// ];
+export const USER_TABLE_DATA_COLUMNS = [
+  { label: "Full Name", field: "fullName" },
+  { label: "Date of Birth", field: "dob" },
+  { label: "Email", field: "email" },
+  { label: "Phone", field: "phoneNumber" },
+  { label: "Gender", field: "gender" },
+  { label: "Marital Status", field: "maritalStatus" },
+  { label: "Education", field: "education" },
+  { label: "Status", field: "status" },
+];
+
+// rows: [
+//   {
+//     profile: "Jon Snow",
+//     Gender: "Male",
+//     Age: "29",
+//     maritalStatus: "Single",
+//     subscription: "Premium",
+//     Locatoin: "pakistan",
+//     status: "active",
+//     Education: "Master's Degree",
+//   },
+// ...Array(5).fill({
+//   profile: "Jon Snow",
+//   Gender: "Male",
+//   Age: "29",
+//   maritalStatus: "Single",
+//   subscription: "Premium",
+//   Locatoin: "pakistan",
+//   status: "active",
+//   Education: "Master's Degree",
+// }),
+// ],
+
 export const DATA_SENT = [
   {
     categoryTitle: "Date Sent",
@@ -404,11 +422,15 @@ export const LIVING_ARRANGEMENTS = [
 ];
 export const WANTS_CHILDREN = ["Yes", "No", "Unsure"];
 export const MARITAL_STATUS = [
-  "Never married",
-  "Legally separated",
+  // "Never married",
+  // "Legally separated",
+  // "Divorced",
+  // "Widowed",
+  // "Annulled",
+  "Single",
+  "Married",
   "Divorced",
   "Widowed",
-  "Annulled",
 ];
 
 //APPEARANCE
@@ -641,7 +663,7 @@ export const DATAING_USER_DATA = [
   { month: "Nov", totalUsers: 10500, activeUsers: 8300, inactiveUsers: 2200 },
   { month: "Dec", totalUsers: 12000, activeUsers: 9500, inactiveUsers: 2500 },
 ];
-
+export const GENDER = ["male", "female"];
 
 export const sections = [
   {
@@ -650,7 +672,7 @@ export const sections = [
       "My Citizenship": "Pakistani",
       "Country of Origin": "Pakistan",
       "Willing to Relocate?": "Internationally",
-      "I am Looking to Marry": "As soon as possible",
+      "I am Education to Marry": "As soon as possible",
       "My Income": "Prefer not to say",
       "Marital Status": "Never married",
       "Would I like to have Children?": "Yes",
@@ -705,4 +727,83 @@ export const sections = [
       "Do You Perform Salaah?": "Always",
     },
   },
+];
+
+export const ADMIN_ROLE = [
+  { value: "super_admin", label: "Super Admin" },
+  { value: "moderator", label: "Moderator" },
+  { value: "support", label: "Support" },
+  { value: "editor", label: "Editor" },
+];
+
+export const GenderTypes = ["male", "female"];
+export const SoftSkills: string[] = [
+  "Communication",
+  "Teamwork",
+  "Problem-Solving",
+  "Time Management",
+  "Adaptability",
+  "Creativity",
+  "Leadership",
+  "Critical Thinking",
+  "Work Ethic",
+  "Emotional Intelligence",
+  "Decision Making",
+  "Conflict Resolution",
+  "Negotiation",
+  "Active Listening",
+  "Collaboration",
+  "Flexibility",
+  "Interpersonal Skills",
+  "Attention to Detail",
+  "Resilience",
+  "Self-Motivation",
+];
+
+export const TechnicalSkills: string[] = [
+  "HTML",
+  "CSS",
+  "JavaScript",
+  "TypeScript",
+  "React",
+  "Next.js",
+  "Node.js",
+  "Express.js",
+  "Redux",
+  "Tailwind CSS",
+  "Bootstrap",
+  "Material UI",
+  "Git",
+  "GitHub",
+  "REST API",
+  "GraphQL",
+  "MongoDB",
+  "Firebase",
+  "Appwrite",
+  "SQL",
+  "PostgreSQL",
+  "Docker",
+  "Kubernetes",
+  "AWS",
+  "Google Cloud",
+  "CI/CD",
+  "Testing (Jest, Cypress)",
+  "Data Structures",
+  "Algorithms",
+];
+export const Religions: string[] = [
+  "Islam",
+  "Christianity",
+  "Hinduism",
+  "Buddhism",
+  "Judaism",
+  "Sikhism",
+  "Baháʼí",
+  "Jainism",
+  "Shinto",
+  "Taoism",
+  "Zoroastrianism",
+  "Atheism",
+  "Agnosticism",
+  "Other",
 ];

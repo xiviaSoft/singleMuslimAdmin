@@ -1,86 +1,58 @@
-import { Add, KeyboardArrowDown, Tune } from "@mui/icons-material";
+import { Add, KeyboardArrowDown } from "@mui/icons-material";
 import { Box, Stack } from "@mui/material";
-import { CustomButton, CustomDialogBox, MoreVertMenu, PageHeader } from "components";
-
-import { UserDetailTab, UserTable, UserTabs } from "features/ManageUsers/components";
-import { useState } from "react";
+import { CustomButton, PageHeader, CustomPagination, CustomSort } from "components";
+import { UserTable, UserTabs } from "features/ManageUsers/components";
 import { FormProvider, useForm } from "react-hook-form";
-
+import { useNavigate } from "react-router";
+import { ROUTES } from "constant";
+import { useState } from "react";
 
 const ManageUsersContainer = () => {
-    const [edit, setEdit] = useState(false);
-    const [addUser, setAddUser] = useState(false);
-    // const [isFilter, setIsFilter] = useState(false);
+    const methods = useForm();
+    const navigate = useNavigate();
+    const [selectedTab, setSelectedTab] = useState("Active Users");
+    // const [page, setPage] = useState(1);
+    const [sortBy, setSortBy] = useState("Name (A–Z)");
+    const pageSize = 5;
 
-
-    const handleLogout = () => {
-        console.log("User logged out");
-        setEdit(false);
-    };
-    const menuItems = [
-        { label: "Edit", action: () => setEdit(true) },
-        { label: "Delete", action: () => setEdit(true) },
-    ];
-
-
-
-    const methods = useForm()
-
+    const handleUserPage = () => navigate(ROUTES.ADD_USER);
 
     return (
         <FormProvider {...methods}>
-
             <Stack gap={2}>
-
-
-                {/* //PageHeader */}
                 <PageHeader title="Manage Users" />
+                <UserTabs value={selectedTab} onChange={setSelectedTab} />
 
-
-                {/* user tabs */}
-                <UserTabs />
-
-
-                {/* button */}
-                <Stack direction={'row'} sx={{ justifyContent: 'end', gap: '10px' }}>
-                    <Box sx={{ display: 'flex', mr: 'auto' }}>
-                        <CustomButton variant="contained" title="Add User" onClick={() => setAddUser(true)} endIcon={<Add />} />
-                    </Box>
-
-                    <MoreVertMenu items={menuItems} icon={<CustomButton variant="outlined" title="Filter" endIcon={<Tune />}
+                <Stack direction="row" sx={{ justifyContent: "space-between", alignItems: "center" }}>
+                    <CustomButton
+                        variant="contained"
+                        title="Add User"
+                        onClick={handleUserPage}
+                        endIcon={<Add />}
                     />
-                    } />
-                    <CustomButton variant="contained" title="Sort By" endIcon={<KeyboardArrowDown />} />
+                    <CustomSort
+                        value={sortBy}
+                        onChange={setSortBy}
+                        options={["Name (A–Z)", "Name (Z–A)", "Newest"]}
+                    />
                 </Stack>
 
-                {/* dilog box */}
-                <CustomDialogBox
-                    open={edit}
-                    title="Edit you detail ?"
-                    onClose={() => setEdit(false)}
-                    onConfirm={handleLogout}
-                    confirmText="Yes, Edit"
+                {/* Pass pagination + sorting props down */}
+                <UserTable
+                    filterType={selectedTab}
+                    // page={page}
+                    sortBy={sortBy}
+                    pageSize={pageSize}
+                />
 
-                >
-                    <UserDetailTab />
-                </CustomDialogBox>
-
-
-                {/* dialog box for user */}
-                <CustomDialogBox
-                    open={addUser}
-                    title="Add New User"
-                    onClose={() => setAddUser(false)}
-                    onConfirm={handleLogout}
-                    confirmText="Yes, Add"
-
-                >
-                    <UserDetailTab />
-                </CustomDialogBox>
-                <UserTable icon={<MoreVertMenu items={menuItems} />} />
+                {/* <CustomPagination
+                    page={page}
+                    count={2} // can be dynamic if you calculate total users
+                    onChange={(_, value) => setPage(value)}
+                /> */}
             </Stack>
         </FormProvider>
-    )
-}
+    );
+};
 
-export default ManageUsersContainer
+export default ManageUsersContainer;

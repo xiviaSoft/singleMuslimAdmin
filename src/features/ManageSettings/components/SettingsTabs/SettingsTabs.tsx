@@ -46,7 +46,7 @@ const SettingsTabs = () => {
                             py: 1,
                             width: '250px',
                             transition: '0.3s',
-                            whiteSpace: 'nowrap', // Required for scrollable
+                            whiteSpace: 'nowrap',
                         },
                         '& .Mui-selected': {
                             borderRadius: '12px',
